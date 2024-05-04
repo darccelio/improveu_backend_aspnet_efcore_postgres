@@ -2,7 +2,6 @@
 
 public record UsuarioResponseDto
 {
-
     public UsuarioResponseDto(Usuario usuario)
     {
         Id = usuario?.Id.ToString();
@@ -10,7 +9,7 @@ public record UsuarioResponseDto
         Papel = usuario?.Papel;
         Ativo = usuario?.Ativo;
         DataCriacao = usuario?.DataCriacao.ToShortDateString();
-        UltimaAlteracao = usuario?.UltimaAlteracao != null ? usuario.UltimaAlteracao.Value.ToShortDateString() : null;
+        UltimaAlteracao = usuario?.UltimaAlteracao?.ToShortDateString();
     }
 
     public string? Id { get; set; }
@@ -24,5 +23,10 @@ public record UsuarioResponseDto
     public string? DataCriacao { get; set; }
 
     public string? UltimaAlteracao { get; set; }
+
+    public override string ToString()
+    {
+        return $"Id: {Id}, Email: {Email}, Papel: {Papel}, Ativo: {Ativo}, DataCriacao: {DataCriacao}, UltimaAlteracao: {UltimaAlteracao}";
+    }
 
 }

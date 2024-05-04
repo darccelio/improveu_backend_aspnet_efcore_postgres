@@ -22,7 +22,7 @@ public abstract class Base
     [Timestamp]
     public DateTime? UltimaAlteracao
     {
-        get => _ultimaAlteracao ?? _dataCriacao;
+        get => _ultimaAlteracao;
         set => _ultimaAlteracao = DateTime.Now;
     }
 }

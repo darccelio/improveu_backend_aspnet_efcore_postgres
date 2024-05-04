@@ -5,7 +5,7 @@ Accept: application/json
 
 ###
 
-DELETE {{ImproveU_backend_HostAddress}}/api/usuarios/1
+DELETE {{ImproveU_backend_HostAddress}}/api/usuarios/2
 Accept: application/json
 
 ###

@@ -17,42 +17,60 @@ public class UsuarioService : IUsuarioService
 
     private async Task<Usuario> GetUsuarioPorIdAsync(int id)
     {
-        Usuario? usuario = await _context.Usuarios.FindAsync(id);
-        return usuario;
+        try
+        {
+            Usuario? usuario = await _context.Usuarios.FindAsync(id);
+            return usuario;
+        }
+        catch (IOException e)
+        {
+            throw new IOException(e.Message);
+        }
     }
 
     public async Task<UsuarioResponseDto> BuscarUsuarioPorIdAsync(int id)
     {
-
         var usuario = await GetUsuarioPorIdAsync(id);
         return new UsuarioResponseDto(usuario);
-
-
     }
 
     public async Task<UsuarioResponseDto> BuscarUsuarioPorEmailAsync(string email)
     {
         Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
-
-        if (usuario == null) throw new Exception("Usuário não encontrado.");
-
+        if (usuario == null) throw new ArgumentException("Usuário não encontrado.");
         return new UsuarioResponseDto(usuario);
     }
 
     public async Task<IEnumerable<UsuarioResponseDto>> BuscarUsuariosAsync(int skip, int take)
     {
         List<Usuario> usuarios = await _context.Usuarios.AsNoTracking().Skip(skip).Take(take).ToListAsync();
-
+        usuarios.ForEach(u => Console.WriteLine(u.ToString()));
         return usuarios.Select(u => new UsuarioResponseDto(u));
     }
 
+    public async Task<UsuarioResponseDto> CriarUsuarioAsync(UsuarioCreateRequestDto usuarioRequest)
+    {
+        Usuario? usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Email == usuarioRequest.Email);
 
-    public async Task AtualizarUsuarioAsync(int id, UsuarioUpdateRequest usuarioRequest)
+        if (usuario != null)
+        {
+            throw new ArgumentException("Usuário já cadastrado.");
+        }
+
+        Usuario novoUsuario = new Usuario(usuarioRequest.Email, usuarioRequest.Papel, usuarioRequest.Senha);
+
+        _context.Usuarios.Add(novoUsuario);
+        _context.SaveChanges();
+
+        UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(novoUsuario);
+        return usuarioResponseDto;
+    }
+
+    public async Task AtualizarUsuarioAsync(int id, UsuarioUpdateRequestDto usuarioRequest)
     {
         try
         {
             Usuario? usuario = await GetUsuarioPorIdAsync(id);
-
             if (usuarioRequest.email != null) usuario.Email = usuarioRequest.email;
             if (usuarioRequest.papel != null) usuario.Papel = (int)usuarioRequest.papel;
             if (usuarioRequest.senha != null) usuario.Senha = usuarioRequest.senha;
@@ -62,9 +80,9 @@ public class UsuarioService : IUsuarioService
             _context.Usuarios.Update(usuario);
             _context.SaveChanges();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-            throw new Exception(e.Message);
+            throw new IOException(e.Message);
         }
     }
 
@@ -76,32 +94,14 @@ public class UsuarioService : IUsuarioService
             usuario.Ativo = 0;
 
             usuario.UltimaAlteracao = DateTime.Now;
-
-            //_context.Usuarios.Update(usuario);
             _context.SaveChanges();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
-            throw new Exception(e.Message);
+            throw new IOException(e.Message);
         }
     }
 
 
-    public async Task<UsuarioResponseDto> CriarUsuarioAsync(UsuarioCreateRequestDto usuarioRequest)
-    {
-        Usuario? usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Email == usuarioRequest.Email);
-
-        if (usuario != null)
-        {
-            throw new Exception("Usuário já cadastrado.");
-        }
-
-        Usuario novoUsuario = new Usuario(usuarioRequest.Email, usuarioRequest.Papel, usuarioRequest.Senha);
-
-        _context.Usuarios.Add(novoUsuario);
-        _context.SaveChanges();
-
-        UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(novoUsuario);
-        return usuarioResponseDto;
-    }
+    
 }

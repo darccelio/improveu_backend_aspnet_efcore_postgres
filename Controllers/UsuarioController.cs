@@ -74,7 +74,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     // public IActionResult CadastraUsuario([FromBody] CriarUsuarioRequestDto usuarioRequestDto)
     public async Task<IActionResult> Atualizar(int id,
-        [FromBody] UsuarioUpdateRequest atualizarDto)
+        [FromBody] UsuarioUpdateRequestDto atualizarDto)
     {
         await _usuarioService.AtualizarUsuarioAsync(id, atualizarDto);
         return NoContent();
