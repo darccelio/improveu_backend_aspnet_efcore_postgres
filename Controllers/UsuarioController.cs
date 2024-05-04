@@ -1,4 +1,5 @@
-﻿using ImproveU_backend.Models.Dtos;
+﻿using ImproveU_backend.Models;
+using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace ImproveU_backend.Controllers;
 
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/usuarios")]
 public class UsuarioController : ControllerBase
 {
 
@@ -19,7 +20,7 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Usuario), StatusCodes.Status200OK)]
     public async Task<IActionResult> Buscar(
         [FromQuery] int skip = 0,
         [FromQuery] int take = 10,
@@ -43,7 +44,7 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Usuario), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> BuscarPorId(int id)
     {
@@ -57,7 +58,8 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]    
+    [ProducesResponseType(typeof(Usuario), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Criar([FromBody] UsuarioCreateRequestDto usuarioRequestDto)
     {
         var usuario = await _usuarioService.CriarUsuarioAsync(usuarioRequestDto);
@@ -69,11 +71,26 @@ public class UsuarioController : ControllerBase
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     // public IActionResult CadastraUsuario([FromBody] CriarUsuarioRequestDto usuarioRequestDto)
     public async Task<IActionResult> Atualizar(int id,
         [FromBody] UsuarioUpdateRequest atualizarDto)
     {
         await _usuarioService.AtualizarUsuarioAsync(id, atualizarDto);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Deletar(int id)
+    {
+        var usuario = await _usuarioService.BuscarUsuarioPorIdAsync(id);
+        if (usuario == null)
+        {
+            return NotFound();
+        }
+        await _usuarioService.DeletarUsuarioPorIdAsync(id);
         return NoContent();
     }
 }

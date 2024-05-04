@@ -77,7 +77,7 @@ public class UsuarioService : IUsuarioService
 
             usuario.UltimaAlteracao = DateTime.Now;
 
-            _context.Usuarios.Update(usuario);
+            //_context.Usuarios.Update(usuario);
             _context.SaveChanges();
         }
         catch (Exception e)

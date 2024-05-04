@@ -1,6 +1,11 @@
-@ImproveU_backend_HostAddress = http://localhost:5158
+@ImproveU_backend_HostAddress = http://localhost:32770
 
-GET {{ImproveU_backend_HostAddress}}/weatherforecast/
+GET {{ImproveU_backend_HostAddress}}/api/usuarios/
+Accept: application/json
+
+###
+
+DELETE {{ImproveU_backend_HostAddress}}/api/usuarios/1
 Accept: application/json
 
 ###
