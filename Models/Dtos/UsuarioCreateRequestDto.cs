@@ -24,4 +24,3 @@ public record UsuarioCreateRequestDto
 }
 
 
-

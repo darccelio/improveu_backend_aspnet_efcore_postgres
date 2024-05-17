@@ -17,17 +17,15 @@ public class Usuario : Base
         Ativo = 1;
     }
 
-
-    //[Required(ErrorMessage = "O campo email é obrigatório.")]
+    [Required(ErrorMessage = "O campo email é obrigatório.")]
     [EmailAddress(ErrorMessage = "O campo email é inválido.")]
     public string Email { get; set; }
 
-    //[Required(ErrorMessage = "O campo papel é obrigatório.")]
+    [Required(ErrorMessage = "O campo papel é obrigatório.")]
     public int Papel { get; set; }
 
-    //[Required(ErrorMessage = "O campo senha é obrigatório.")]
+    [Required(ErrorMessage = "O campo senha é obrigatório.")]
     public string Senha { get; set; }
 
     public int? Ativo { get; set; }
-
 }

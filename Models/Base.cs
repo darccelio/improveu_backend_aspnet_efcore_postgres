@@ -5,7 +5,6 @@ namespace ImproveU_backend.Models;
 public abstract class Base
 {
     private DateTime _dataCriacao;
-    private DateTime? _ultimaAlteracao;
 
     public Base()
     {
@@ -20,9 +19,8 @@ public abstract class Base
     }
 
     [Timestamp]
-    public DateTime? UltimaAlteracao
-    {
-        get => _ultimaAlteracao;
-        set => _ultimaAlteracao = DateTime.Now;
-    }
+    public DateTime? UltimaAlteracao { get; set; }
+
+    public void AtualizaUltimaAlteracao(DateTime date) => UltimaAlteracao = date;
+  
 }

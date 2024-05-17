@@ -2,6 +2,7 @@ using ImproveU_backend.DatabaseConfiguration.Context;
 using ImproveU_backend.Services.Interfaces;
 using ImproveU_backend.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod());
 });
 
+// Add DbContext
 builder.Services.AddDbContext<ImproveuContext>(options =>
         options
         .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -30,13 +32,20 @@ builder.Services.AddDbContext<ImproveuContext>(options =>
         .LogTo(Console.WriteLine, LogLevel.Information));
 
 
+builder.Services.AddControllers();
+
+// Add Swagger services
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ImproveU API", Version = "v1" });
+});
+
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.ListenAnyIP(5001, listenOptions => listenOptions.UseConnectionLogging());
-    serverOptions.ListenAnyIP(5000, listenOptions =>  listenOptions.UseHttps().UseConnectionLogging());
+    serverOptions.ListenAnyIP(5000, listenOptions => listenOptions.UseHttps().UseConnectionLogging());
 });
 
-builder.Services.AddControllers();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 var app = builder.Build();
@@ -53,10 +62,22 @@ app.Use(async (context, next) =>
 // Configure the HTTP request pipeline swagger.
 if (app.Environment.IsDevelopment()){
     app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImproveU API V1");
+        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+    });
+    app.UseCors("Development");
+}
+else
+{
+    app.UseCors("Production");
 }
 
+app.UseRouting();
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
