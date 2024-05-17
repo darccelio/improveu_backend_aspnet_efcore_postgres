@@ -28,7 +28,7 @@ O projeto pode ser rodado através das seguintes ferramentas:
 			- Senha: admin																					
 		- Clique em `Register` e preencha com as seguintes informações:
 			- Aba General -> Name: nome para a conexão, conforme desejar;
-			- Aba Connection -> Host: ` improveu-databa	se`, Port: `5432`,  Username: `improveu`, Password: `improveu`, Maintenance database: `postgres`;
+			- Aba Connection -> Host: ` improveu-database`, Port: `5432`,  Username: `improveu`, Password: `improveu`, Maintenance database: `postgres`;
 
 		Obs.: esse procedimento estará acessando informações disponíveis dentro do container.
 	
