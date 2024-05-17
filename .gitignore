@@ -486,3 +486,7 @@ $RECYCLE.BIN/
 
 ImproveU-backend/appsettings.Development.json
 /appsettings.Development.json
+
+./volume-db
+./volume-db/*
+/volume-db

@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  # improveu-backend-oficial:
+  #   image: ${DOCKER_REGISTRY-}improveubackend
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: backend
+  #   ports:
+  #     - 5000:5000
+  #     - 5001:5001
+  #   environment:
+  #     ConnectionStrings__DefaultConnection: "Host=improveu-database;Database=improveudb;Username=improveu;Password=improveu"
+  #   depends_on:
+  #     - improveu-database
+    # networks:
+    #   - improveu-network
+
+  improveu-database:
+    image: postgres:latest
+    container_name: database
+    environment:
+        - POSTGRES_DB=improveudb
+        - POSTGRES_USER=improveu
+        - POSTGRES_PASSWORD=improveu
+    volumes:
+        - ./volume-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    # networks:
+    #   - improveu-network
+    restart: on-failure
+  
+  pgadmin:
+    image: dpage/pgadmin4:8.6
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - 5004:80
+    depends_on:
+      - improveu-database
+#     networks:
+#       - improveu-network
+
+# networks:
+#   improveu-network:
+#     driver: bridge
