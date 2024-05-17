@@ -4,15 +4,11 @@ namespace ImproveU_backend.Services.Interfaces;
 
 public interface IUsuarioService
 {
+    public Task<UsuarioResponseDto> CriarAsync(UsuarioCreateRequestDto usuarioRequest);
+    public Task<UsuarioResponseDto> BuscarPorIdAsync(int id);
+    public Task<IEnumerable<UsuarioResponseDto>> BuscarAsync(int skip, int take);
+    public Task<UsuarioResponseDto> BuscarPorEmailAsync(string email);
 
-    public Task<UsuarioResponseDto> BuscarUsuarioPorIdAsync(int id);
-    public Task<UsuarioResponseDto> CriarUsuarioAsync(UsuarioCreateRequestDto usuarioRequest);
-    public Task<IEnumerable<UsuarioResponseDto>> BuscarUsuariosAsync(int skip, int take);
-
-    public Task AtualizarUsuarioAsync(int id, UsuarioUpdateRequestDto usuarioRequest);
-    public Task DeletarUsuarioPorIdAsync(int id);
-
-    public Task<UsuarioResponseDto> BuscarUsuarioPorEmailAsync(string email);
-
-
+    public Task<bool> AtualizarAsync(int id, UsuarioUpdateRequestDto usuarioRequest);
+    public Task InativarPorIdAsync(int id);
 }

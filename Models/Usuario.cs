@@ -28,4 +28,6 @@ public class Usuario : Base
     public string Senha { get; set; }
 
     public int? Ativo { get; set; }
+
+    public virtual Pessoa Pessoa { get; set; }
 }

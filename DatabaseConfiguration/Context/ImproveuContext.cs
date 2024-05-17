@@ -8,8 +8,14 @@ public class ImproveuContext(DbContextOptions<ImproveuContext> _options ) : DbCo
 {
     public DbSet<Usuario> Usuarios { get; set; }
 
+    public DbSet<Pessoa> Pessoas { get; set; }
+
+    public DbSet<EdFisico> EdFisicos { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UsuarioDbConfiguration());
+        modelBuilder.ApplyConfiguration(new PessoaDbConfiguration());
+        modelBuilder.ApplyConfiguration(new EdFisicoDbConfiguration());
     }
 }

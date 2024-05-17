@@ -15,40 +15,7 @@ public class UsuarioService : IUsuarioService
         _context = context;
     }
 
-    private async Task<Usuario> GetUsuarioPorIdAsync(int id)
-    {
-        try
-        {
-            Usuario? usuario = await _context.Usuarios.FindAsync(id);
-            return usuario;
-        }
-        catch (IOException e)
-        {
-            throw new IOException(e.Message);
-        }
-    }
-
-    public async Task<UsuarioResponseDto> BuscarUsuarioPorIdAsync(int id)
-    {
-        var usuario = await GetUsuarioPorIdAsync(id);
-        return new UsuarioResponseDto(usuario);
-    }
-
-    public async Task<UsuarioResponseDto> BuscarUsuarioPorEmailAsync(string email)
-    {
-        Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
-        if (usuario == null) throw new ArgumentException("Usuário não encontrado.");
-        return new UsuarioResponseDto(usuario);
-    }
-
-    public async Task<IEnumerable<UsuarioResponseDto>> BuscarUsuariosAsync(int skip, int take)
-    {
-        List<Usuario> usuarios = await _context.Usuarios.AsNoTracking().Skip(skip).Take(take).ToListAsync();
-        usuarios.ForEach(u => Console.WriteLine(u.ToString()));
-        return usuarios.Select(u => new UsuarioResponseDto(u));
-    }
-
-    public async Task<UsuarioResponseDto> CriarUsuarioAsync(UsuarioCreateRequestDto usuarioRequest)
+    public async Task<UsuarioResponseDto> CriarAsync(UsuarioCreateRequestDto usuarioRequest)
     {
         Usuario? usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Email == usuarioRequest.Email);
 
@@ -65,20 +32,27 @@ public class UsuarioService : IUsuarioService
         UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(novoUsuario);
         return usuarioResponseDto;
     }
+     
 
-    public async Task AtualizarUsuarioAsync(int id, UsuarioUpdateRequestDto usuarioRequest)
+    public async Task<IEnumerable<UsuarioResponseDto>> BuscarAsync(int skip, int take)
+    {
+        List<Usuario> usuarios = await _context.Usuarios.AsNoTracking().Skip(skip).Take(take).ToListAsync();
+
+        return usuarios.Select(u => new UsuarioResponseDto(u));
+    }
+
+    public async Task<UsuarioResponseDto> BuscarPorIdAsync(int id)
+    {
+        var usuario = await GetUsuarioPorIdAsync(id);
+        return new UsuarioResponseDto(usuario);
+    }
+
+    private async Task<Usuario> GetUsuarioPorIdAsync(int id)
     {
         try
         {
-            Usuario? usuario = await GetUsuarioPorIdAsync(id);
-            if (usuarioRequest.email != null) usuario.Email = usuarioRequest.email;
-            if (usuarioRequest.papel != null) usuario.Papel = (int)usuarioRequest.papel;
-            if (usuarioRequest.senha != null) usuario.Senha = usuarioRequest.senha;
-
-            usuario.UltimaAlteracao = DateTime.Now;
-
-            _context.Usuarios.Update(usuario);
-            _context.SaveChanges();
+            Usuario? usuario = await _context.Usuarios.FindAsync(id);
+            return usuario;
         }
         catch (IOException e)
         {
@@ -86,20 +60,52 @@ public class UsuarioService : IUsuarioService
         }
     }
 
-    public async Task DeletarUsuarioPorIdAsync(int id)
+    public async Task<UsuarioResponseDto> BuscarPorEmailAsync(string email)
+    {
+        Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+        if (usuario == null) throw new ArgumentException("Usuário não encontrado.");
+        return new UsuarioResponseDto(usuario);
+    }
+    
+    public async Task<bool> AtualizarAsync(int id, UsuarioUpdateRequestDto usuarioRequest)
     {
         try
         {
-            Usuario? usuario = await GetUsuarioPorIdAsync(id);
-            usuario.Ativo = 0;
+            Usuario? usuarioRecuperado = await GetUsuarioPorIdAsync(id);
 
-            usuario.UltimaAlteracao = DateTime.Now;
-            _context.SaveChanges();
+            if (usuarioRecuperado is Usuario usuario2)
+            {
+                usuarioRecuperado.Email = usuarioRequest.email;
+                usuarioRecuperado.Papel = (int)usuarioRequest.papel;
+                usuarioRecuperado.Senha = usuarioRequest.senha;
+                usuarioRecuperado.AtualizaUltimaAlteracao(DateTime.Now);
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
         catch (IOException e)
         {
             throw new IOException(e.Message);
         }
+    }
+
+    public async Task InativarPorIdAsync(int id)
+    {
+        Usuario? usuario = await GetUsuarioPorIdAsync(id);
+
+        if (usuario == null)
+        {
+            throw new KeyNotFoundException("Usuário não encontrado.");
+        }
+
+        usuario.Ativo = 0;
+        usuario.AtualizaUltimaAlteracao(DateTime.Now);
+        _context.Entry(usuario).State = EntityState.Modified;
+        _context.Update(usuario);
+        await _context.SaveChangesAsync();
     }
 
 

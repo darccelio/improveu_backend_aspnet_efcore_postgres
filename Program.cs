@@ -47,6 +47,8 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 });
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IPessoaService, PessoaService>();
+builder.Services.AddScoped<IEdFisicoService, EdFisicoService>();
 
 var app = builder.Build();
 
@@ -61,13 +63,15 @@ app.Use(async (context, next) =>
 
 // Configure the HTTP request pipeline swagger.
 if (app.Environment.IsDevelopment()){
+
     app.UseSwagger();
-    //app.UseSwaggerUI();
+  
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImproveU API V1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root path
     });
+
     app.UseCors("Development");
 }
 else
