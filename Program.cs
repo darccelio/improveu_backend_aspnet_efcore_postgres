@@ -56,6 +56,7 @@ app.Use(async (context, next) =>
 {
     var localAddress = context.Connection.LocalIpAddress.ToString();
     Console.WriteLine($"API ASP.NET Core disponível em: {localAddress}");
+
     // Continuar com o próximo middleware na pipeline
     await next.Invoke();
 });
@@ -73,10 +74,28 @@ if (app.Environment.IsDevelopment()){
     });
 
     app.UseCors("Development");
+
+    app.Logger.LogInformation(@" ###### ############################## #########
+
+                                        Development environment 
+
+                                 ###### ############################## #########");
 }
 else
 {
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImproveU API V1");
+        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root path
+    });
+
     app.UseCors("Production");
+
+    app.Logger.LogInformation(@" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+                                        Production environment 
+
+                                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 }
 
 app.UseRouting();
@@ -84,5 +103,23 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+if(app.Configuration.GetRequiredSection("DatabaseConfiguration:UseMigration").Get<bool>())
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ImproveuContext>();
+
+    if (context.Database.CanConnect())
+    {
+        try { context.Database.EnsureCreated(); }
+        catch (Exception ex) { app.Logger.LogError(ex.Message, "Error on create database"); }
+
+        if (context.Database.HasPendingModelChanges()) {
+            context.Database.Migrate();
+            app.Logger.LogInformation("Database migrated");
+        }
+    }
+}
 
 app.Run();
