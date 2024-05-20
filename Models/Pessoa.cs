@@ -28,6 +28,8 @@ public class Pessoa : Base
 
     public virtual Usuario? Usuario { get; set; }
 
-    public virtual EdFisico EdFisico { get; set; }
+    public virtual EdFisico? EdFisico { get; set; }
+
+    public virtual Aluno? Aluno { get; set; }
 
 }

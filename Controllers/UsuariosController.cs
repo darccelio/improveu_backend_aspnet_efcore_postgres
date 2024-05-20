@@ -7,11 +7,11 @@ namespace ImproveU_backend.Controllers;
 
 [ApiController]
 [Route("api/usuarios")]
-public class UsuarioController : ControllerBase
+public class UsuariosController : ControllerBase
 {
     private readonly IUsuarioService _usuarioService;
 
-    public UsuarioController(IUsuarioService usuarioService)
+    public UsuariosController(IUsuarioService usuarioService)
     {
         _usuarioService = usuarioService;
     }
@@ -23,7 +23,7 @@ public class UsuarioController : ControllerBase
     public async Task<IActionResult> Criar([FromBody] UsuarioCreateRequestDto usuarioRequestDto)
     {
         var usuario = await _usuarioService.CriarAsync(usuarioRequestDto);
-        return CreatedAtAction(nameof(UsuarioController.BuscarPorId),
+        return CreatedAtAction(nameof(UsuariosController.BuscarPorId),
             new { id = usuario.Id },
             usuario);
     }

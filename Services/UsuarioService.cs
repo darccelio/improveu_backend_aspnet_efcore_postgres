@@ -24,6 +24,8 @@ public class UsuarioService : IUsuarioService
             throw new ArgumentException("Usuário já cadastrado.");
         }
 
+        if(usuario?.Papel != 1) throw new ArgumentException("O papel vinculado a essa pessoa não corresponde a Aluno.");
+
         Usuario novoUsuario = new Usuario(usuarioRequest.Email, usuarioRequest.Papel, usuarioRequest.Senha);
 
         _context.Usuarios.Add(novoUsuario);

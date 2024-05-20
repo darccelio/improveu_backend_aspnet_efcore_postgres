@@ -11,11 +11,13 @@ public class ImproveuContext(DbContextOptions<ImproveuContext> _options ) : DbCo
     public DbSet<Pessoa> Pessoas { get; set; }
 
     public DbSet<EdFisico> EdFisicos { get; set; }
+    public DbSet<Aluno> Alunos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UsuarioDbConfiguration());
         modelBuilder.ApplyConfiguration(new PessoaDbConfiguration());
         modelBuilder.ApplyConfiguration(new EdFisicoDbConfiguration());
+        modelBuilder.ApplyConfiguration(new AlunoConfiguration());
     }
 }

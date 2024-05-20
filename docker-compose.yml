@@ -48,5 +48,5 @@ services:
 networks:
   improveu-network:
     driver: bridge
-    # external: true
+    external: true
   

@@ -8,11 +8,11 @@ namespace ImproveU_backend.Controllers;
 
 [ApiController]
 [Route("api/educadorfisico")]
-public class EdFisicoController : ControllerBase
+public class EdFisicosController : ControllerBase
 {
     private readonly IEdFisicoService _edFisicoService;
 
-    public EdFisicoController(IEdFisicoService edFisicoService)
+    public EdFisicosController(IEdFisicoService edFisicoService)
     {
         _edFisicoService = edFisicoService;
     }
@@ -27,7 +27,7 @@ public class EdFisicoController : ControllerBase
         try
         {
             EdFisicoResponseDto edFisicoResp = await _edFisicoService.CriarAsync(edFisicoRequest);
-            return CreatedAtAction(nameof(EdFisicoController.BuscarPorId), new { id = edFisicoResp.Id }, edFisicoResp);
+            return CreatedAtAction(nameof(EdFisicosController.BuscarPorId), new { id = edFisicoResp.Id }, edFisicoResp);
         }
         catch (ArgumentException e)
         {

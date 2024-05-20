@@ -14,11 +14,15 @@ public class PessoaDbConfiguration : IEntityTypeConfiguration<Pessoa>
         builder.Property(e => e.Nome).HasColumnName("nome").HasColumnType("varchar(255)").IsRequired();
         builder.Property(e => e.Cpf).HasColumnName("cpf").HasColumnType("varchar(11)").IsRequired();
         builder.Property(e => e.UsuarioId).HasColumnName("usuario_id").HasColumnType("int").IsRequired();
+
         builder.Property(e => e.DataCriacao).HasColumnName("data_criacao").HasColumnType("TIMESTAMP").ValueGeneratedOnAdd().HasDefaultValueSql("now()");
         builder.Property(e => e.UltimaAlteracao).HasColumnName("ultima_atualizacao").HasColumnType("TIMESTAMP");
 
         //relacionamentos fk na tabela ed_fisicos
         builder.HasOne(e => e.EdFisico).WithOne(p => p.Pessoa).HasForeignKey<EdFisico>(e => e.PessoaId);
+
+        //relacionamentos fk na tabela alunos
+        builder.HasOne(e => e.Aluno).WithOne(p => p.Pessoa).HasForeignKey<Aluno>(e => e.PessoaId);
     }
 
 }

@@ -39,7 +39,14 @@ public class EdFisicoService : IEdFisicoService
         _context.Pessoas.Add(pessoa);
         await _context.SaveChangesAsync();
 
-        EdFisico novoEdFisico = new EdFisico(edFisicoRequest.RegistroConselho, pessoa);
+        //EdFisico novoEdFisico = new EdFisico(edFisicoRequest.RegistroConselho, pessoa);
+
+        EdFisico novoEdFisico = new EdFisico()
+        {
+            RegistroConselho= edFisicoRequest.RegistroConselho,
+            Pessoa = pessoa,
+            PessoaId = pessoa.Id
+        };
 
         await _context.EdFisicos.AddAsync(novoEdFisico);
         await _context.SaveChangesAsync();
