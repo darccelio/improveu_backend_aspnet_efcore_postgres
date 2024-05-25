@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ImproveU_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class EdFisico : Migration
+    public partial class PessoasEdFisicoAlunos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,13 +36,34 @@ namespace ImproveU_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "alunos",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    pessoa_id = table.Column<int>(type: "int", nullable: false),
+                    data_criacao = table.Column<DateTime>(type: "TIMESTAMP", nullable: false, defaultValueSql: "now()"),
+                    ultima_atualizacao = table.Column<DateTime>(type: "TIMESTAMP", rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_alunos", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_alunos_pessoas_pessoa_id",
+                        column: x => x.pessoa_id,
+                        principalTable: "pessoas",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ed_fisicos",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     registro_conselho = table.Column<string>(type: "varchar(20)", nullable: true),
-                    PessoaId = table.Column<int>(type: "int", nullable: false),
+                    pessoa_id = table.Column<int>(type: "int", nullable: false),
                     data_criacao = table.Column<DateTime>(type: "TIMESTAMP", nullable: false, defaultValueSql: "now()"),
                     ultima_atualizacao = table.Column<DateTime>(type: "TIMESTAMP", rowVersion: true, nullable: true)
                 },
@@ -50,17 +71,23 @@ namespace ImproveU_backend.Migrations
                 {
                     table.PrimaryKey("PK_ed_fisicos", x => x.id);
                     table.ForeignKey(
-                        name: "FK_ed_fisicos_pessoas_PessoaId",
-                        column: x => x.PessoaId,
+                        name: "FK_ed_fisicos_pessoas_pessoa_id",
+                        column: x => x.pessoa_id,
                         principalTable: "pessoas",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ed_fisicos_PessoaId",
+                name: "IX_alunos_pessoa_id",
+                table: "alunos",
+                column: "pessoa_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ed_fisicos_pessoa_id",
                 table: "ed_fisicos",
-                column: "PessoaId",
+                column: "pessoa_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -73,6 +100,9 @@ namespace ImproveU_backend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "alunos");
+
             migrationBuilder.DropTable(
                 name: "ed_fisicos");
 

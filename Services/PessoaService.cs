@@ -26,8 +26,8 @@ public class PessoaService : IPessoaService
         }
 
         pessoa = new Pessoa(pessoaRequest.Cpf, pessoaRequest.Nome, pessoaRequest.UsuarioId);
-        
-        if(pessoa is null)
+
+        if (pessoa is null)
         {
             throw new ArgumentException("Erro de validação.");
         }
@@ -41,7 +41,7 @@ public class PessoaService : IPessoaService
 
     public async Task<PessoaResponseDto> BuscarPorCpfAsync(string cpf)
     {
-        if(string.IsNullOrWhiteSpace(cpf))
+        if (string.IsNullOrWhiteSpace(cpf))
         {
             throw new ArgumentException("Cpf não pode ser nulo ou vazio.");
         }

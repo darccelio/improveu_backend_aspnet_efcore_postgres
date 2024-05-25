@@ -20,7 +20,7 @@ public class EdFisicoController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(EdFisicoResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Criar([FromBody] EdFisicoRequestDto edFisicoRequest)
+    public async Task<IActionResult> Criar([FromBody] EdFisicoCreateRequestDto edFisicoRequest)
     {
         if (edFisicoRequest == null)
             return BadRequest();

@@ -4,6 +4,12 @@
 
 O objetivo do projeto ImproveU é viabilizar a mudança de estilo de vida para pessoas que desejam uma rotina mais saudável acompanhada da prática de exercícios físicos, ou até para quem já possui esse estilo de vida e deseja visualizar a sua evolução de maneira mais acessível com gráficos e elevando o nível do seu treino, utilizando o treino personalizado montado por um profissional de educação física.
 
+## Tecnologias
+
+- .NET 8.0 (AspNet core)
+- Entity Framework Core
+- Docker (PostgreSQL)
+- Docker (PgAdmin)
 
 ## Instalação
 
@@ -24,7 +30,7 @@ O projeto pode ser rodado através das seguintes ferramentas:
 - Para realizar consultas no banco de dados:- 
 	- Acesse o PgAdmin através do link http://localhost:5004/login?next=/browser/ para realizar consultas (psql) no banco de dados com as informações:
 		- Preencha o login: 
-			- Email: admin@admin.com
+			- Email: admin@gmail.com
 			- Senha: admin																					
 		- Clique em `Register` e preencha com as seguintes informações:
 			- Aba General -> Name: nome para a conexão, conforme desejar;

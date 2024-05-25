@@ -18,9 +18,9 @@ builder.Services.AddCors(options =>
                       });
 
     options.AddPolicy(name: "Production",
-        builder => builder.WithOrigins("https://localhost:9000") //url frontend
-                          .AllowAnyHeader()
-                          .AllowAnyMethod());
+                     builder => builder.WithOrigins("https://localhost:9000") //url frontend
+                                       .AllowAnyHeader()
+                                       .AllowAnyMethod());
 });
 
 // Add DbContext
@@ -63,10 +63,11 @@ app.Use(async (context, next) =>
 
 
 // Configure the HTTP request pipeline swagger.
-if (app.Environment.IsDevelopment()){
+if (app.Environment.IsDevelopment())
+{
 
     app.UseSwagger();
-  
+
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImproveU API V1");
@@ -83,6 +84,8 @@ if (app.Environment.IsDevelopment()){
 }
 else
 {
+
+    app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImproveU API V1");
@@ -100,11 +103,11 @@ else
 
 app.UseRouting();
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 app.MapControllers();
 
-if(app.Configuration.GetRequiredSection("DatabaseConfiguration:UseMigration").Get<bool>())
+if (app.Configuration.GetRequiredSection("DatabaseConfiguration:UseMigration").Get<bool>())
 {
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
@@ -113,9 +116,13 @@ if(app.Configuration.GetRequiredSection("DatabaseConfiguration:UseMigration").Ge
     if (context.Database.CanConnect())
     {
         try { context.Database.EnsureCreated(); }
-        catch (Exception ex) { app.Logger.LogError(ex.Message, "Error on create database"); }
+        catch (Exception ex)
+        {
+            app.Logger.LogError(ex.Message, "Error on create database");
+        }
 
-        if (context.Database.HasPendingModelChanges()) {
+        if (context.Database.HasPendingModelChanges())
+        {
             context.Database.Migrate();
             app.Logger.LogInformation("Database migrated");
         }

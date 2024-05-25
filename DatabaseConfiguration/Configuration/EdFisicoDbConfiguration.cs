@@ -13,6 +13,7 @@ public class EdFisicoDbConfiguration : IEntityTypeConfiguration<EdFisico>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").HasColumnType("int").IsRequired().ValueGeneratedOnAdd().UseIdentityAlwaysColumn();
         builder.Property(e => e.RegistroConselho).HasColumnName("registro_conselho").HasColumnType("varchar(20)");
+        builder.Property(builder => builder.PessoaId).HasColumnName("pessoa_id").HasColumnType("int");
         
         builder.Property(e => e.DataCriacao).HasColumnName("data_criacao").HasColumnType("TIMESTAMP").ValueGeneratedOnAdd().HasDefaultValueSql("now()");
         builder.Property(e => e.UltimaAlteracao).HasColumnName("ultima_atualizacao").HasColumnType("TIMESTAMP");

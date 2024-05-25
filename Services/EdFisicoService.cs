@@ -17,7 +17,7 @@ public class EdFisicoService : IEdFisicoService
         _pessoaService = pessoaService;
     }
 
-    public async Task<EdFisicoResponseDto> CriarAsync(EdFisicoRequestDto edFisicoRequest)
+    public async Task<EdFisicoResponseDto> CriarAsync(EdFisicoCreateRequestDto edFisicoRequest)
     {
         if (edFisicoRequest is null)
             throw new ArgumentNullException(nameof(edFisicoRequest), "O objeto EdFisicoRequestDto não pode ser nulo.");
