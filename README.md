@@ -6,39 +6,58 @@ O objetivo do projeto ImproveU é viabilizar a mudança de estilo de vida para p
 
 ## Tecnologias
 
-- .NET 8.0 (AspNet core)
+- .NET 8.0 (AspNet core): clique no linke para baixar o .net 8 caso ainda não possua: https://dotnet.microsoft.com/download/dotnet/8.0
 - Entity Framework Core
 - Docker (PostgreSQL)
 - Docker (PgAdmin)
 
 ## Instalação
 
-O projeto pode ser rodado através das seguintes ferramentas:
+- Instale o .NET 8.0 (AspNet core) através do link: https://dotnet.microsoft.com/download/dotnet/8.0
+- Instale o Docker através do link: https://docs.docker.com/get-docker/
+- Instale o Entity Framework Core rodando o código a seguir através do Windows PowerShell: `dotnet tool install --global dotnet-ef`
 
-- Clone o repositório;
-- Abra o projeto no Visual Studio 2022 ou Visual Studio Code;
-- Execute o projeto.
-	- execute os comandos pela linha de comando/terminal no diretório do projeto:
-	- `dotnet restore`
-	-	`dotnet build`
-		- `docker compose up` (para rodar o banco de dados)
-		- `dotnet ef database update` (aguarde a criação do banco de dados através do log no terminal para poder aplicar as migrações no banco de dados em container)
-		- `dotnet run`
+## Configuração
 
-- Acesse a aplicação através do link: https://localhost:5000/index.html ou http://localhost:5001/index.html para acessar os endpoints da API.
+- Clone o repositório através do repositório, através do endereço: `https://github.com/darccelio/improveu_backend_aspnet_efcore_postgres` 
 
-- Para realizar consultas no banco de dados:- 
-	- Acesse o PgAdmin através do link http://localhost:5004/login?next=/browser/ para realizar consultas (psql) no banco de dados com as informações:
+
+## Execução
+
+- Inicie o serviço Docker:
+	- Sistema Operacional Windows: abra a ferramenta Docker Desktop e verifique se o serviço está rodando (normalmente o serviço inicia-se com a abertura do Docker Desktop)
+	- Sistema Operacional Linux: abra o terminal e execute o comando `sudo systemctl start docker` para iniciar o serviço Docker.
+
+	- Abra o terminal e navague até o diretório do projeto onde está o arquivo `docker-compose.yml` e execute o comando `docker compose up`  para iniciar o serviço do banco de dados Postgres. Se rodar o comando acrescentando a flag `-d` no final, o serviço será iniciado em segundo plano, sem apresentar os logs no terminal (exemplo: `docker compose up -d`)
+
+É possível executar o projeto através do Visual Studio 2022, Visual Studio Code ou através do terminal/Windows PowerShell. Abaixo estão os passos para executar o projeto conforme cada opção de ferramenta:
+	
+	- Acesse a pasta do projeto através do terminal/Windows PowerShell.
+		- Execute o comando `dotnet restore` para atualizar as dependências e bibliotecas do projeto.
+		- Execute o comando `dotnet build` para compilar o projeto.		
+		- Execute o comando `dotnet ef database update` para criar o banco de dados e aplicar as migrações.
+		- Execute o comando `dotnet run` para executar a aplicação.
+
+	- Abra o projeto no Visual Studio 2022, Visual Studio Code ou através do terminal/Windows PowerShell:
+		- Para abrir o projeto no Visual Studio 2022, clique no arquivo `ImproveU.sln` e aguarde a abertura do projeto.
+		- Para abrir o proejto no Visual Studio Code, abra o terminal na pasta do projeto e execute o comando `code .` para abrir o projeto.
+			- Execute o comando `dotnet ef database update` para criar o banco de dados e aplicar as migrações.
+			- Execute o comando `dotnet run` para executar a aplicação.
+				
+- Acesse a aplicação através do link: http://localhost:5001/index.html ou  https://localhost:5000/index.html para testar os endpoints da API através do SwaggerUI.
+
+- Para executar consultas sql diretamente no banco de dados conforme as opções abaixo:
+	1) Acesse o PgAdmin através do link http://localhost:5004/login?next=/browser/ para realizar consultas (psql) no banco de dados com as informações:
 		- Preencha o login: 
 			- Email: admin@gmail.com
 			- Senha: admin																					
-		- Clique em `Register` e preencha com as seguintes informações:
+		- Clique com o botão direito do mouse em `Servers` e em seguida, clique em `Register` e em `Server` e preencha com as seguintes informações:
 			- Aba General -> Name: nome para a conexão, conforme desejar;
-			- Aba Connection -> Host: ` improveu-database`, Port: `5432`,  Username: `improveu`, Password: `improveu`, Maintenance database: `postgres`;
+			- Aba Connection -> Host name/address: `improveu-database`, Port: `5432`,  Username: `improveu`, Password: `improveu`, Maintenance database: `improveudb`;
 
 		Obs.: esse procedimento estará acessando informações disponíveis dentro do container.
 	
-	- Acesse o gerenciador de Banco de dados de sua preferencia e utilize as informações:
+	2) Acesse o gerenciador de Banco de dados de sua preferencia e utilize as informações:
 		- Host: `localhost`, Port: `5432`,  Username: `improveu`, Password: `improveu`, Database: `improvedb` 
 		
 		Obs.: esse procedimento estará acessando informações disponíveis no volume-db disponível na raiz do projeto.
