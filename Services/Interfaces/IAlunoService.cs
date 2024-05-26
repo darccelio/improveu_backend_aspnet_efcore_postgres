@@ -10,5 +10,5 @@ public interface IAlunoService
     public Task<AlunoResponseDto> BuscarPorIdAsync(int id);
 
     public Task AtualizarAsync(int id, AlunoUpdateRequestDto alunoRequest);
-    public Task InativarPorIdAsync(int id);
+    public Task RemoverPorIdAsync(int id);
 }

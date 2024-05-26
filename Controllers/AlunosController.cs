@@ -1,7 +1,10 @@
 ﻿using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Services;
 using ImproveU_backend.Services.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.ConstrainedExecution;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,9 +28,8 @@ namespace ImproveU_backend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Criar([FromBody] AlunoCreateRequestDto dto)
         {
-
             if (dto == null)
-                return BadRequest();
+                return BadRequest($"{nameof(dto)}, O objeto AlunoCreateRequestDto não pode ser nulo.");
             try
             {
                 AlunoResponseDto resp = await _alunoService.CriarAsync(dto);
@@ -68,17 +70,50 @@ namespace ImproveU_backend.Controllers
 
         // PUT api/<AlunoController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] string value)
+        [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Put(int id, [FromBody] AlunoUpdateRequestDto value)
         {
-            return Ok();
+            try
+            {
+                await _alunoService.AtualizarAsync(id, value);
+                return NoContent();
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
 
         }
 
         // DELETE api/<AlunoController>/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            try
+            {
+                await _alunoService.RemoverPorIdAsync(id);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message); // Retorna 404 com a mensagem da exceção
+            }
+            catch (DbUpdateException ex)
+            {
+                // Trate exceções específicas do Entity Framework Core, por exemplo, violações de chave estrangeira
+                return BadRequest("Erro ao tentar atualizar o banco de dados.");
+            }
+            catch (Exception ex)
+            {
+                // Lidar com outras exceções de forma genérica
+                // Registrar o erro em um log, retornar uma mensagem de erro genérica, etc.
+                return StatusCode(500, "Ocorreu um erro interno no servidor.");
+            }
         }
     }
 }

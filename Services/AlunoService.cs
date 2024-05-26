@@ -69,31 +69,36 @@ public class AlunoService : IAlunoService
 
     public async Task AtualizarAsync(int id, AlunoUpdateRequestDto alunoRequest)
     {
-        //if (alunoRequest is null)
-        //    throw new ArgumentNullException(nameof(alunoRequest), "O objeto EdFisicoRequestDto não pode ser nulo.");
+        if (alunoRequest is null)
+            throw new ArgumentNullException(nameof(alunoRequest), "O objeto EdFisicoRequestDto não pode ser nulo.");
 
-        //if(id != alunoRequest.Id)
-        //    throw new ArgumentException("Id do objeto diferente do id da rota.");
+        if (id != alunoRequest.Id)
+            throw new ArgumentException("Id do objeto é diferente do id da rota.");
 
-        //Aluno? aluno = await _context.Alunos.Include(aluno => aluno.Pessoa).FirstOrDefaultAsync(al => al.Id == id);
+        Aluno? aluno = await _context.Alunos.Include(aluno => aluno.Pessoa).Where(predicate: al => al.Id == al.PessoaId && al.Id == id).FirstOrDefaultAsync();
 
-        //if (aluno is null)
-        //    throw new ArgumentException("Aluno não encontrado.");
+        if (aluno is null)
+            throw new ArgumentException("Não foi possível alterar pois o Aluno não foi encontrado.");
 
-        //aluno.Pessoa.Nome = alunoRequest?.Nome;
-        //aluno.Pessoa.Cpf = alunoRequest?.Cpf;
+        aluno.Pessoa.Nome = alunoRequest.Nome;
+        aluno.Pessoa.Cpf = alunoRequest.Cpf;
 
-        //_context.Alunos.Update(aluno);
-        //_context.Entry(aluno.Pessoa).State = EntityState.Modified;
+        _context.Alunos.Update(aluno);
+        _context.Entry(aluno.Pessoa).State = EntityState.Modified;
 
-        //return _context?.SaveChangesAsync();
-
-        throw new NotImplementedException();
-
+        await _context.SaveChangesAsync();
     }
 
-    public Task InativarPorIdAsync(int id)
+    public async Task RemoverPorIdAsync(int id)
     {
-        throw new NotImplementedException();
+        Aluno? aluno = await _context.Alunos.Include(p => p.Pessoa).FirstOrDefaultAsync(p => p.Id == id && p.PessoaId == p.Pessoa.Id);
+
+        if (aluno is null)
+            throw new ArgumentException("Aluno não encontrado.");
+
+        _context.Pessoas.Remove(aluno.Pessoa);
+
+        _context.Alunos.Remove(aluno);
+        await _context.SaveChangesAsync();
     }
 }
