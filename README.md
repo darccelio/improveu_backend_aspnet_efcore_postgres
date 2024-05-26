@@ -6,10 +6,11 @@ O objetivo do projeto ImproveU é viabilizar a mudança de estilo de vida para p
 
 ## Tecnologias
 
-- .NET 8.0 (AspNet core): clique no linke para baixar o .net 8 caso ainda não possua: https://dotnet.microsoft.com/download/dotnet/8.0
+- .NET 8.0 (AspNet core)
 - Entity Framework Core
-- Docker (PostgreSQL)
-- Docker (PgAdmin)
+- Docker Desktop (Windows) ou Docker Engine (Linux)
+- PostgreSQL
+- PgAdmin
 
 ## Instalação
 
