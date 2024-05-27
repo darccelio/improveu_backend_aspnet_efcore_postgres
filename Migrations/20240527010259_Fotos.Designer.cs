@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ImproveU_backend.Migrations
 {
     [DbContext(typeof(ImproveuContext))]
-    [Migration("20240525163029_InsertPessoasEdFisicosAlunosSamples")]
-    partial class InsertPessoasEdFisicosAlunosSamples
+    [Migration("20240527010259_Fotos")]
+    partial class Fotos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,6 +95,49 @@ namespace ImproveU_backend.Migrations
                         .IsUnique();
 
                     b.ToTable("ed_fisicos", (string)null);
+                });
+
+            modelBuilder.Entity("ImproveU_backend.Models.Foto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataCriacao")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("data_criacao")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Extensão")
+                        .IsRequired()
+                        .HasColumnType("varchar(5)")
+                        .HasColumnName("extensão");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("path");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("int")
+                        .HasColumnName("pessoa_id");
+
+                    b.Property<DateTime?>("UltimaAlteracao")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("ultima_atualizacao");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaId");
+
+                    b.ToTable("fotos", (string)null);
                 });
 
             modelBuilder.Entity("ImproveU_backend.Models.Pessoa", b =>
@@ -208,6 +251,17 @@ namespace ImproveU_backend.Migrations
                     b.Navigation("Pessoa");
                 });
 
+            modelBuilder.Entity("ImproveU_backend.Models.Foto", b =>
+                {
+                    b.HasOne("ImproveU_backend.Models.Pessoa", "Pessoa")
+                        .WithMany("Fotos")
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+                });
+
             modelBuilder.Entity("ImproveU_backend.Models.Pessoa", b =>
                 {
                     b.HasOne("ImproveU_backend.Models.Usuario", "Usuario")
@@ -225,6 +279,8 @@ namespace ImproveU_backend.Migrations
 
                     b.Navigation("EdFisico")
                         .IsRequired();
+
+                    b.Navigation("Fotos");
                 });
 
             modelBuilder.Entity("ImproveU_backend.Models.Usuario", b =>

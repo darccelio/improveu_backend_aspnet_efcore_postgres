@@ -7,7 +7,7 @@ namespace ImproveU_backend.Migrations;
 /// <inheritdoc />
 public partial class InsertPessoasEdFisicosAlunosSamples : Migration
 {
-   
+
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.Sql("INSERT INTO pessoas (cpf, nome, usuario_id) SELECT '20100987818', 'João Luiz Gonçalves', id FROM usuarios WHERE email = 'uEdFisicoTeste1@email.com'");

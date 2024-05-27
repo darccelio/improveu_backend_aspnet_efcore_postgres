@@ -1,10 +1,7 @@
 ﻿using ImproveU_backend.Models.Dtos;
-using ImproveU_backend.Services;
 using ImproveU_backend.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.ConstrainedExecution;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

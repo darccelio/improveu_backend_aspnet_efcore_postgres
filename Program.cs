@@ -1,13 +1,8 @@
 using ImproveU_backend.Configuration;
-using ImproveU_backend.DatabaseConfiguration.Context;
-using ImproveU_backend.Services;
-using ImproveU_backend.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
+using ImproveU_backend.DatabaseConfiguration.Configuration;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Net.WebRequestMethods;
-using System.Security.Cryptography.Xml;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +22,13 @@ builder.Services.AddCors(options =>
                                        .AllowAnyHeader()
                                        .AllowAnyMethod());
 });
+
+//configuração para limitar o recebimento de imagens de até 50MB
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 52428800; // 50 MB
+});
+
 
 // Add DbContext
 builder.Services.AddDbContext<ImproveuContext>(options =>
@@ -80,9 +82,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors("Development");
 
     app.Logger.LogInformation(@" ###### ############################## #########
-
                                         Development environment 
-
                                  ###### ############################## #########");
 }
 else
@@ -102,9 +102,7 @@ else
     //app.UseHsts();
 
     app.Logger.LogInformation(@" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
                                         Production environment 
-
                                  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
     );
 }
@@ -113,5 +111,6 @@ app.UseHttpsRedirection();
 //app.UseAuthentication();
 //app.UseAuthorization();
 app.MapControllers();
+
 
 app.Run();

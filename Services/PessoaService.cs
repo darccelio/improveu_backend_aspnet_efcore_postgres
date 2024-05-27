@@ -1,4 +1,4 @@
-﻿using ImproveU_backend.DatabaseConfiguration.Context;
+﻿using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Services.Interfaces;

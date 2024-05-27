@@ -1,6 +1,4 @@
-﻿using ImproveU_backend.Migrations;
-
-namespace ImproveU_backend.Models.Dtos;
+﻿namespace ImproveU_backend.Models.Dtos;
 
 public class PessoaResponseDto
 {
@@ -14,7 +12,7 @@ public class PessoaResponseDto
     public string DataCriacao { get; set; }
 
     public string UltimaAlteracao { get; set; }
- 
+
     public PessoaResponseDto(Pessoa pessoa)
     {
         Id = pessoa.Id;

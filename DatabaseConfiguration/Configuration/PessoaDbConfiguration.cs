@@ -22,6 +22,9 @@ public class PessoaDbConfiguration : IEntityTypeConfiguration<Pessoa>
 
         //relacionamentos fk na tabela alunos
         builder.HasOne(e => e.Aluno).WithOne(p => p.Pessoa).HasForeignKey<Aluno>(e => e.PessoaId);
+
+        //relacionamentos fk na tabela alunos
+        builder.HasMany(f => f.Fotos).WithOne(p => p.Pessoa).HasForeignKey(f => f.PessoaId);
     }
 
 }

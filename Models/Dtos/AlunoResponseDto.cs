@@ -2,7 +2,7 @@
 
 public class AlunoResponseDto
 {
-   public int Id { get; set; }
+    public int Id { get; set; }
 
     public PessoaResponseDto PessoaRequest { get; set; }
 

@@ -32,4 +32,6 @@ public class Pessoa : Base
 
     public virtual Aluno? Aluno { get; set; }
 
+    public virtual ICollection<Foto> Fotos { get; set; }
+
 }

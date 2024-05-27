@@ -1,4 +1,4 @@
-﻿using ImproveU_backend.DatabaseConfiguration.Context;
+﻿using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Services.Interfaces;
@@ -70,7 +70,7 @@ public class AlunoService : IAlunoService
     public async Task AtualizarAsync(int id, AlunoUpdateRequestDto alunoRequest)
     {
         if (alunoRequest is null)
-            throw new ArgumentNullException(nameof(alunoRequest), "O objeto EdFisicoRequestDto não pode ser nulo.");
+            throw new ArgumentNullException(nameof(alunoRequest), "O objeto AlunoUpdateRequestDto não pode ser nulo.");
 
         if (id != alunoRequest.Id)
             throw new ArgumentException("Id do objeto é diferente do id da rota.");
