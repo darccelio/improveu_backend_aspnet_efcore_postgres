@@ -17,10 +17,18 @@ builder.Services.AddCors(options =>
                                  .AllowAnyHeader();
                       });
 
+    //options.AddPolicy(name: "Production",
+    //                 builder => builder.WithOrigins("https://localhost:80") //url frontend
+    //                                   .AllowAnyHeader()
+    //                                   .AllowAnyMethod());
+
     options.AddPolicy(name: "Production",
-                     builder => builder.WithOrigins("https://localhost:9000") //url frontend
-                                       .AllowAnyHeader()
-                                       .AllowAnyMethod());
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                                 .AllowAnyMethod()
+                                 .AllowAnyHeader();
+                      });
 });
 
 //configuração para limitar o recebimento de imagens de até 50MB
