@@ -1,6 +1,6 @@
 ﻿using ImproveU_backend.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ImproveU_backend.DatabaseConfiguration.Configuration;
 

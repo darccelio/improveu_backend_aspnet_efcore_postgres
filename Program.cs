@@ -1,6 +1,6 @@
-using ImproveU_backend.DatabaseConfiguration.Context;
-using ImproveU_backend.Services.Interfaces;
-using ImproveU_backend.Services;
+using ImproveU_backend.Configuration;
+using ImproveU_backend.DatabaseConfiguration.Configuration;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -18,10 +18,17 @@ builder.Services.AddCors(options =>
                       });
 
     options.AddPolicy(name: "Production",
-        builder => builder.WithOrigins("https://localhost:9000") //url frontend
-                          .AllowAnyHeader()
-                          .AllowAnyMethod());
+                     builder => builder.WithOrigins("https://localhost:9000") //url frontend
+                                       .AllowAnyHeader()
+                                       .AllowAnyMethod());
 });
+
+//configuração para limitar o recebimento de imagens de até 50MB
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 52428800; // 50 MB
+});
+
 
 // Add DbContext
 builder.Services.AddDbContext<ImproveuContext>(options =>
@@ -46,9 +53,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.ListenAnyIP(5000, listenOptions => listenOptions.UseHttps().UseConnectionLogging());
 });
 
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-builder.Services.AddScoped<IPessoaService, PessoaService>();
-builder.Services.AddScoped<IEdFisicoService, EdFisicoService>();
+builder.Services.ResolveDependencies();
 
 var app = builder.Build();
 
@@ -63,10 +68,11 @@ app.Use(async (context, next) =>
 
 
 // Configure the HTTP request pipeline swagger.
-if (app.Environment.IsDevelopment()){
+if (app.Environment.IsDevelopment())
+{
 
     app.UseSwagger();
-  
+
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImproveU API V1");
@@ -76,50 +82,35 @@ if (app.Environment.IsDevelopment()){
     app.UseCors("Development");
 
     app.Logger.LogInformation(@" ###### ############################## #########
-
                                         Development environment 
-
                                  ###### ############################## #########");
 }
 else
 {
+
+    app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImproveU API V1");
         c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root path
     });
-
     app.UseCors("Production");
 
+    /* When UseHsts() is called, it adds the Strict-Transport - Security HTTP header to the responses sent by your application.This header tells browsers that your site should only be accessed using HTTPS, not HTTP, and that this policy should be remembered for a certain amount of time.
+     Please note that HSTS should be used with caution, as incorrectly configuring it can cause your site to become inaccessible.
+     */
+    //app.UseHsts();
+
     app.Logger.LogInformation(@" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
                                         Production environment 
-
-                                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                                 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+    );
 }
-
 app.UseRouting();
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 app.MapControllers();
 
-if(app.Configuration.GetRequiredSection("DatabaseConfiguration:UseMigration").Get<bool>())
-{
-    using var scope = app.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ImproveuContext>();
-
-    if (context.Database.CanConnect())
-    {
-        try { context.Database.EnsureCreated(); }
-        catch (Exception ex) { app.Logger.LogError(ex.Message, "Error on create database"); }
-
-        if (context.Database.HasPendingModelChanges()) {
-            context.Database.Migrate();
-            app.Logger.LogInformation("Database migrated");
-        }
-    }
-}
 
 app.Run();

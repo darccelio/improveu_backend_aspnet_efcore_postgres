@@ -30,4 +30,8 @@ public class Pessoa : Base
 
     public virtual EdFisico EdFisico { get; set; }
 
+    public virtual Aluno? Aluno { get; set; }
+
+    public virtual ICollection<Foto> Fotos { get; set; }
+
 }

@@ -490,3 +490,8 @@ ImproveU-backend/appsettings.Development.json
 ./volume-db
 ./volume-db/*
 /volume-db
+
+
+../static/images/**
+/static/images/**
+/static/images/*

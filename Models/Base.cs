@@ -22,5 +22,5 @@ public abstract class Base
     public DateTime? UltimaAlteracao { get; set; }
 
     public void AtualizaUltimaAlteracao(DateTime date) => UltimaAlteracao = date;
-  
+
 }

@@ -1,10 +1,7 @@
-﻿using ImproveU_backend.Migrations;
-
-namespace ImproveU_backend.Models.Dtos;
+﻿namespace ImproveU_backend.Models.Dtos;
 
 public class PessoaResponseDto
 {
-
     public int Id { get; set; }
 
     public string Cpf { get; set; }
@@ -12,18 +9,18 @@ public class PessoaResponseDto
 
     public int UsuarioId { get; set; }
 
-    public PessoaResponseDto(string cpf, string nome, int usuarioId)
-    {
-        Cpf = cpf;
-        Nome = nome;
-        UsuarioId = usuarioId;
-    }
+    public string DataCriacao { get; set; }
+
+    public string UltimaAlteracao { get; set; }
 
     public PessoaResponseDto(Pessoa pessoa)
     {
+        Id = pessoa.Id;
         Cpf = pessoa.Cpf;
         Nome = pessoa.Nome;
         UsuarioId = pessoa.UsuarioId;
+        DataCriacao = pessoa.DataCriacao.ToShortDateString();
+        UltimaAlteracao = pessoa.UltimaAlteracao?.ToShortDateString();
     }
 }
 

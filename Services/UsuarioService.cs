@@ -1,7 +1,7 @@
-﻿using ImproveU_backend.Models.Dtos;
+﻿using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
+using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Services.Interfaces;
-using ImproveU_backend.DatabaseConfiguration.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace ImproveU_backend.Services;
@@ -32,7 +32,7 @@ public class UsuarioService : IUsuarioService
         UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(novoUsuario);
         return usuarioResponseDto;
     }
-     
+
 
     public async Task<IEnumerable<UsuarioResponseDto>> BuscarAsync(int skip, int take)
     {
@@ -66,7 +66,7 @@ public class UsuarioService : IUsuarioService
         if (usuario == null) throw new ArgumentException("Usuário não encontrado.");
         return new UsuarioResponseDto(usuario);
     }
-    
+
     public async Task<bool> AtualizarAsync(int id, UsuarioUpdateRequestDto usuarioRequest)
     {
         try
@@ -109,5 +109,5 @@ public class UsuarioService : IUsuarioService
     }
 
 
-    
+
 }

@@ -1,8 +1,6 @@
-using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.WebEncoders.Testing;
 
 namespace ImproveU_backend.Controllers;
 
@@ -20,7 +18,7 @@ public class EdFisicoController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(EdFisicoResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Criar([FromBody] EdFisicoRequestDto edFisicoRequest)
+    public async Task<IActionResult> Criar([FromBody] EdFisicoCreateRequestDto edFisicoRequest)
     {
         if (edFisicoRequest == null)
             return BadRequest();
