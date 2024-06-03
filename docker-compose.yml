@@ -1,21 +1,21 @@
 version: '3.9'
 
 services:
-  improveu-backend-oficial:
-    image: ${DOCKER_REGISTRY-}improveubackend
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: backend
-    ports:
-      - 5000:5000
-      - 5001:5001
-    environment:
-      ConnectionStrings__DefaultConnection: "Host=improveu-database;Database=improveudb;Username=improveu;Password=improveu"
-    depends_on:
-      - improveu-database
-    networks:
-      - improveu-network
+  # improveu-backend-oficial:
+  #   image: ${DOCKER_REGISTRY-}improveubackend
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: backend
+  #   ports:
+  #     - 5000:5000
+  #     - 5001:5001
+  #   environment:
+  #     ConnectionStrings__DefaultConnection: "Host=improveu-database;Database=improveudb;Username=improveu;Password=improveu"
+  #   depends_on:
+  #     - improveu-database
+  #   networks:
+  #     - improveu-network
 
   improveu-database:
     image: postgres:latest
