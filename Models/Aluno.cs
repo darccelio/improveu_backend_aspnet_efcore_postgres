@@ -12,4 +12,10 @@ public class Aluno : Base
     public int PessoaId { get; set; }
 
     public virtual Pessoa Pessoa { get; set; }
+
+    public int TreinoId { get; set; }
+
+    public virtual ICollection<Treino> Treinos { get; set; }
+
+    public virtual ICollection<Feedback> Feedbacks { get; set; }
 }

@@ -5,8 +5,6 @@ namespace ImproveU_backend.Models.Dtos;
 
 public record FotosCreateRequestDto
 {
-
-
     [Required(ErrorMessage = "A extensão é obrigatória.")]
     public string Extensao { get; set; }
 

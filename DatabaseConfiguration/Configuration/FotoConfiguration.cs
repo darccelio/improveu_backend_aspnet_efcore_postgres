@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ImproveU_backend.DatabaseConfiguration.Configuration;
 
-internal class FotosConfiguration : IEntityTypeConfiguration<Foto>
+internal class FotoConfiguration : IEntityTypeConfiguration<Foto>
 {
 
     public void Configure(EntityTypeBuilder<Foto> builder)
@@ -21,7 +21,11 @@ internal class FotosConfiguration : IEntityTypeConfiguration<Foto>
 
         builder.Property(f => f.PessoaId).HasColumnName("pessoa_id").HasColumnType("int").IsRequired();
 
+
         builder.Property(e => e.DataCriacao).HasColumnName("data_criacao").HasColumnType("TIMESTAMP").ValueGeneratedOnAdd().HasDefaultValueSql("now()");
         builder.Property(e => e.UltimaAlteracao).HasColumnName("ultima_atualizacao").HasColumnType("TIMESTAMP");
-    }
+
+        //relacionamentos fk na tabela pessoas
+        builder.HasOne(f => f.Pessoa).WithMany(p => p.Fotos).HasForeignKey(f => f.PessoaId);
 }
+    }
