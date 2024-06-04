@@ -22,7 +22,7 @@ public class FotosController : ControllerBase
     }
 
     [HttpPost]
-    [RequestSizeLimit(52428800)]
+    [RequestSizeLimit(52428800)] //50mb
     [ProducesResponseType(typeof(FotosResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary), StatusCodes.Status400BadRequest)]

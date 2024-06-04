@@ -78,7 +78,6 @@ app.Use(async (context, next) =>
 // Configure the HTTP request pipeline swagger.
 if (app.Environment.IsDevelopment())
 {
-
     app.UseSwagger();
 
     app.UseSwaggerUI(c =>
@@ -116,8 +115,8 @@ else
 }
 app.UseRouting();
 app.UseHttpsRedirection();
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 
