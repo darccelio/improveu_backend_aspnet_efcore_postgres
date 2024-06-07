@@ -48,6 +48,7 @@ builder.Services.AddDbContext<ImproveuContext>(options =>
 
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Add Swagger services
 builder.Services.AddSwaggerGen(c =>

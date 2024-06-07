@@ -25,7 +25,7 @@ services:
         - POSTGRES_USER=improveu
         - POSTGRES_PASSWORD=improveu
     volumes:
-        - ./volume-db:/var/lib/postgresql/data
+        - ../ImproveU-Volume-Postgresdb:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:

@@ -3,8 +3,9 @@
 public class Exercicio : Base
 {
     public int Id { get; set; }
-    public string Nome { get; set; }    
+    public string Nome { get; set; }
 
-    public int ItemTreinoId { get; set; }
-    public virtual ItemTreino ItemTreino { get; set; }
+    public virtual ICollection<ItemTreino>? ItensTreino { get; set; } = null;
+
+    
 }

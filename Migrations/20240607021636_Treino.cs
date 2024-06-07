@@ -13,18 +13,31 @@ namespace ImproveU_backend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "TreinoId",
+                name: "treino_id",
                 table: "ed_fisicos",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
+                type: "int",
+                nullable: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "TreinoId",
+                name: "treino_id",
                 table: "alunos",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.CreateTable(
+                name: "exercicios",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    Nome = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    data_criacao = table.Column<DateTime>(type: "TIMESTAMP", nullable: false, defaultValueSql: "now()"),
+                    ultima_atualizacao = table.Column<DateTime>(type: "TIMESTAMP", rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_exercicios", x => x.id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "treinos",
@@ -34,9 +47,9 @@ namespace ImproveU_backend.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     ed_fisico_id = table.Column<int>(type: "int", nullable: false),
                     aluno_id = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     data_inicio_vigencia = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     data_fim_vigencia = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     data_criacao = table.Column<DateTime>(type: "TIMESTAMP", nullable: false, defaultValueSql: "now()"),
                     ultima_atualizacao = table.Column<DateTime>(type: "TIMESTAMP", rowVersion: true, nullable: true)
                 },
@@ -58,28 +71,6 @@ namespace ImproveU_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "grupos_treino",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    nome = table.Column<string>(type: "varchar(255)", nullable: false),
-                    treino_id = table.Column<int>(type: "int", nullable: false),
-                    data_criacao = table.Column<DateTime>(type: "TIMESTAMP", nullable: false, defaultValueSql: "now()"),
-                    ultima_atualizacao = table.Column<DateTime>(type: "TIMESTAMP", rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_grupos_treino", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_grupos_treino_treinos_treino_id",
-                        column: x => x.treino_id,
-                        principalTable: "treinos",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "itens_treino",
                 columns: table => new
                 {
@@ -89,7 +80,7 @@ namespace ImproveU_backend.Migrations
                     repeticoes = table.Column<int>(type: "int", nullable: false),
                     series = table.Column<int>(type: "int", nullable: false),
                     exercicio_id = table.Column<int>(type: "int", nullable: false),
-                    grupo_treino_id = table.Column<int>(type: "int", nullable: false),
+                    treino_id = table.Column<int>(type: "int", nullable: false),
                     feedback_id = table.Column<int>(type: "int", nullable: true),
                     data_criacao = table.Column<DateTime>(type: "TIMESTAMP", nullable: false, defaultValueSql: "now()"),
                     ultima_atualizacao = table.Column<DateTime>(type: "TIMESTAMP", rowVersion: true, nullable: true)
@@ -98,31 +89,15 @@ namespace ImproveU_backend.Migrations
                 {
                     table.PrimaryKey("PK_itens_treino", x => x.id);
                     table.ForeignKey(
-                        name: "FK_itens_treino_grupos_treino_grupo_treino_id",
-                        column: x => x.grupo_treino_id,
-                        principalTable: "grupos_treino",
+                        name: "FK_itens_treino_exercicios_exercicio_id",
+                        column: x => x.exercicio_id,
+                        principalTable: "exercicios",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "exercicios",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    Nome = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    item_treino_id = table.Column<int>(type: "int", nullable: false),
-                    data_criacao = table.Column<DateTime>(type: "TIMESTAMP", nullable: false, defaultValueSql: "now()"),
-                    ultima_atualizacao = table.Column<DateTime>(type: "TIMESTAMP", rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_exercicios", x => x.id);
                     table.ForeignKey(
-                        name: "FK_exercicios_itens_treino_item_treino_id",
-                        column: x => x.item_treino_id,
-                        principalTable: "itens_treino",
+                        name: "FK_itens_treino_treinos_treino_id",
+                        column: x => x.treino_id,
+                        principalTable: "treinos",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -164,12 +139,6 @@ namespace ImproveU_backend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_exercicios_item_treino_id",
-                table: "exercicios",
-                column: "item_treino_id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_feedbacks_aluno_id",
                 table: "feedbacks",
                 column: "aluno_id");
@@ -186,14 +155,14 @@ namespace ImproveU_backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_grupos_treino_treino_id",
-                table: "grupos_treino",
-                column: "treino_id");
+                name: "IX_itens_treino_exercicio_id",
+                table: "itens_treino",
+                column: "exercicio_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_itens_treino_grupo_treino_id",
+                name: "IX_itens_treino_treino_id",
                 table: "itens_treino",
-                column: "grupo_treino_id");
+                column: "treino_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_treinos_aluno_id",
@@ -210,26 +179,23 @@ namespace ImproveU_backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "exercicios");
-
-            migrationBuilder.DropTable(
                 name: "feedbacks");
 
             migrationBuilder.DropTable(
                 name: "itens_treino");
 
             migrationBuilder.DropTable(
-                name: "grupos_treino");
+                name: "exercicios");
 
             migrationBuilder.DropTable(
                 name: "treinos");
 
             migrationBuilder.DropColumn(
-                name: "TreinoId",
+                name: "treino_id",
                 table: "ed_fisicos");
 
             migrationBuilder.DropColumn(
-                name: "TreinoId",
+                name: "treino_id",
                 table: "alunos");
         }
     }

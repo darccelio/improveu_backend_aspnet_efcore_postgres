@@ -10,8 +10,8 @@ public class ItemTreino : Base
     public int ExercicioId { get; set; }
     public virtual Exercicio Exercicio { get; set; }
    
-    public int  GrupoTreinoId { get; set; }
-    public virtual GrupoTreino GrupoTreino { get; set; }
+    public int  TreinoId { get; set; }
+    public virtual Treino Treino { get; set; }
 
     public int? FeedbackId{ get; set; }
     public Feedback Feedback { get; set; }

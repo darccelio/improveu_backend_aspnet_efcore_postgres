@@ -10,7 +10,7 @@ public class EdFisico : Base
     public virtual Pessoa Pessoa { get; set; }
     public int PessoaId { get; set; }
 
-    public int TreinoId { get; set; }
+    public int? TreinoId { get; set; }
 
     public virtual ICollection<Treino> Treinos { get; set; }
 
