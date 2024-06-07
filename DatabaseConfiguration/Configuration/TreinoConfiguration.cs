@@ -29,7 +29,7 @@ public class TreinoConfiguration : IEntityTypeConfiguration<Treino>
         //relacionamentos fk na tabela Aluno
         builder.HasOne(e => e.Aluno).WithMany(t => t.Treinos).HasForeignKey(e => e.AlunoId);
 
-        //relacionamentos fk na tabela GrupoTreino
-        builder.HasMany(e => e.GruposTreinos).WithOne(t => t.Treino).HasForeignKey(e => e.TreinoId);
+        //relacionamentos fk na tabela Item Treino
+        builder.HasMany(e => e.ItensTreino).WithOne(t => t.Treino).HasForeignKey(e => e.TreinoId);
     }
 }

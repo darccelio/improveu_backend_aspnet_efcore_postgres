@@ -13,7 +13,7 @@ public class Aluno : Base
 
     public virtual Pessoa Pessoa { get; set; }
 
-    public int TreinoId { get; set; }
+    public int? TreinoId { get; set; }
 
     public virtual ICollection<Treino> Treinos { get; set; }
 

@@ -12,10 +12,13 @@ public class ExercicioConfiguration : IEntityTypeConfiguration<Exercicio>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").HasColumnType("int").IsRequired().ValueGeneratedOnAdd().UseIdentityAlwaysColumn();
         builder.Property(e => e.Nome).IsRequired().HasMaxLength(100);
-        builder.Property(e => e.ItemTreinoId).HasColumnName("item_treino_id").HasColumnType("int").IsRequired();
+        
 
         builder.Property(f => f.DataCriacao).HasColumnName("data_criacao").HasColumnType("TIMESTAMP").ValueGeneratedOnAdd().HasDefaultValueSql("now()");
         builder.Property(f => f.UltimaAlteracao).HasColumnName("ultima_atualizacao").HasColumnType("TIMESTAMP");
+
+        //relacionamentos fk na tabela ItemTreino
+        builder.HasMany(e => e.ItensTreino).WithOne(t => t.Exercicio).HasForeignKey(e => e.ExercicioId);    
 
     }
 
