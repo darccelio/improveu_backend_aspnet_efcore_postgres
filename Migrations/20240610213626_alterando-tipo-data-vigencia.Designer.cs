@@ -3,6 +3,7 @@ using System;
 using ImproveU_backend.DatabaseConfiguration.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ImproveU_backend.Migrations
 {
     [DbContext(typeof(ImproveuContext))]
-    partial class ImproveuContextModelSnapshot : ModelSnapshot
+    [Migration("20240610213626_alterando-tipo-data-vigencia")]
+    partial class alterandotipodatavigencia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

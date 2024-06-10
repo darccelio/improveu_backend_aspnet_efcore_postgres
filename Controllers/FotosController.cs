@@ -1,9 +1,9 @@
 ﻿using ImproveU_backend.DatabaseConfiguration.Configuration;
-using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Services;
-using ImproveU_backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using ImproveU_backend.Models.Dtos.PessoaDto;
+using ImproveU_backend.Services.Interfaces.IPessoaSerivce;
 
 namespace ImproveU_backend.Controllers;
 

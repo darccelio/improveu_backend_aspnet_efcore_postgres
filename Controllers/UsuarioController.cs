@@ -1,6 +1,5 @@
-﻿
-using ImproveU_backend.Models.Dtos;
-using ImproveU_backend.Services.Interfaces;
+﻿using ImproveU_backend.Models.Dtos.UsuarioDto;
+using ImproveU_backend.Services.Interfaces.IUsuarioService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ImproveU_backend.Controllers;

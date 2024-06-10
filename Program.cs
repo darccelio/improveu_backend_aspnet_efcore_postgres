@@ -121,4 +121,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 
+// Configurar fuso horário padrão para UTC em todo o aplicativo
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+
 app.Run();
