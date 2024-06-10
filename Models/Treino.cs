@@ -10,9 +10,8 @@ public class Treino : Base
 
     public int Status  { get; set; } = 1;
 
-    public DateTime DataInicioVigencia { get; set; }
-    public DateTime DataFimVigencia { get; set; }
+    public DateTime? DataInicioVigencia { get; set; }
+    public DateTime? DataFimVigencia { get; set; }
 
     public virtual ICollection<ItemTreino> ItensTreino { get; set; }
-
 }

@@ -11,10 +11,10 @@ public class ItemTreinoConfiguration : IEntityTypeConfiguration<ItemTreino>
         builder.ToTable("itens_treino");
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").HasColumnType("int").IsRequired().ValueGeneratedOnAdd().UseIdentityAlwaysColumn();
-        builder.Property(e => e.CargaEmKg).HasColumnName("carga").HasColumnType("int").IsRequired();
-        builder.Property(e => e.Repeticoes).HasColumnName("repeticoes").HasColumnType("int").IsRequired();
-        builder.Property(e => e.Series).HasColumnName("series").HasColumnType("int").IsRequired();
-        
+        builder.Property(e => e.CargaEmKg).HasColumnName("carga").HasColumnType("int");
+        builder.Property(e => e.Repeticoes).HasColumnName("repeticoes").HasColumnType("int");
+        builder.Property(e => e.Series).HasColumnName("series").HasColumnType("int");
+        builder.Property(e => e.IntervaloDescanso).HasColumnName("intervalo_descanso").HasColumnType("int");
         builder.Property(e => e.ExercicioId).HasColumnName("exercicio_id").HasColumnType("int").IsRequired();
         
         builder.Property(e => e.TreinoId).HasColumnName("treino_id").HasColumnType("int").IsRequired();

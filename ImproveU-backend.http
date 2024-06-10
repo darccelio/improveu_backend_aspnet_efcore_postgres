@@ -1,4 +1,5 @@
-@ImproveU_backend_HostAddress = http://localhost:32770
+@ImproveU-backend_HostAddress = https://localhost:5000
+@ImproveU_backend_HostAddress = http://localhost:5001
 
 GET {{ImproveU_backend_HostAddress}}/api/usuarios/
 Accept: application/json
@@ -7,5 +8,40 @@ Accept: application/json
 
 DELETE {{ImproveU_backend_HostAddress}}/api/usuarios/2
 Accept: application/json
+
+###
+
+
+POST {{ImproveU-backend_HostAddress}}/api/usuarios
+Content-Type: application/json
+
+{
+  //UsuarioCreateRequestDto
+}
+
+###
+
+POST {{ImproveU-backend_HostAddress}}/api/treino
+Content-Type: application/json
+ssl: false
+
+{
+  {
+    "edFisicoId": 1,
+    "alunoId": 1,
+    "dataInicioVigencia": "2024-06-09T13:38:37.139Z",
+    "dataFimVigencia": "2024-06-09T13:38:37.139Z",
+    "itensTreino": 
+    [
+      {
+        "exercicioId": 1,
+        "repeticoes": 1,
+        "series": 1,
+        "intervaloDescanso": 0,
+        "cargaEmKg": 0
+      }
+    ]
+  }
+}
 
 ###

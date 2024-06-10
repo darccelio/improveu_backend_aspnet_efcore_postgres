@@ -3,9 +3,10 @@
 public class ItemTreino : Base
 {
     public int Id { get; set; }
-    public int CargaEmKg { get; set; }
-    public int Repeticoes { get; set; }
-    public int Series { get; set; }
+    public int? CargaEmKg { get; set; } = null;
+    public int? Repeticoes { get; set; } = null;
+    public int? Series { get; set; } = null;
+    public int? IntervaloDescanso { get; set; } = null;
 
     public int ExercicioId { get; set; }
     public virtual Exercicio Exercicio { get; set; }
