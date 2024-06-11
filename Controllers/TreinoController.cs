@@ -1,111 +1,24 @@
-﻿using ImproveU_backend.Models;
+﻿using ImproveU_backend.Models.Dtos.PessoaDto;
+using ImproveU_backend.Models.Dtos.TreinoDto;
 using ImproveU_backend.Services.Interfaces.ITreino;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using ImproveU_backend.Models.Dtos.TreinoDto;
-using ImproveU_backend.Models.Dtos;
 
 namespace ImproveU_backend.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("api/treinos")]
 public class TreinoController : ControllerBase
 {
+      
+    private readonly ITreinoService _treinoService;
 
-    private readonly IExercicioService _exercicio;
-    private readonly ITreinoService _treino;
-
-    public TreinoController(IExercicioService exercicio, ITreinoService treino)
-    {
-        _exercicio = exercicio;
-        _treino = treino;
-    }
-
-    [HttpPost("exercicios")]
-    [ProducesResponseType(typeof(ExercicioResponseDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Criar([FromBody] ExercicioCreateRequestDto exercicioDto)
-    {
-
-        try
-        {
-            ExercicioResponseDto exercicio = await _exercicio.CriarAsync(exercicioDto);
-            return CreatedAtAction(nameof(TreinoController.BuscarExecicioPorId), new { id = exercicio.Id }, exercicio);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.InnerException?.Message);
-        }
-    }
-
-    [HttpGet("exercicios/{id}")]
-    [ProducesResponseType(typeof(ExercicioResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> BuscarExecicioPorId(int id)
-    {
-        try
-        {
-            var exercicio = await _exercicio.BuscarPorIdAsync(id);
-            if (exercicio == null)
-            {
-                return NotFound();
-            }
-            return Ok(exercicio);
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Erro ao encontar o exercício pelo motivo: {e.Message}");
-        }
-    }
-
-    [HttpGet("exercicios")]
-    [ProducesResponseType(typeof(ExercicioResponseDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Buscar([FromQuery] int skip = 0,
-                                            [FromQuery] int take = 10,
-                                            [FromQuery] string? nome = "")
-    {
-        try
-        {
-            if(!string.IsNullOrWhiteSpace(nome))
-            {
-                var exercicio = await _exercicio.BuscarPorNomeAsync(nome);
-                if (exercicio == null)
-                {
-                    return NotFound("Exercicio não localizado");
-                }
-                return Ok(exercicio);
-            }
-            var exercicios = await _exercicio.BuscarAsync(skip, take);
-            return Ok(exercicios);
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Erro ao encontar o(s) exercício(s) pelo motivo: {e.Message}");
-        }
-    }
-
-    [HttpPut("exercicios/{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Atualizar(int id, [FromBody] ExercicioUpdateRequestDto exercicioDto)
-    {
-        try
-        {
-            await _exercicio.Atualizar(id, exercicioDto);
-            return NoContent();
-        }
-        catch (Exception e)
-        {
-            return BadRequest($"Erro ao atualizar o exercício pelo motivo: {e.Message}");
-        }
-    }
+    public TreinoController(ITreinoService service)
+    {        
+        _treinoService = service;
+    }   
 
 
-    [HttpPost("treino")]
+    [HttpPost]
     [ProducesResponseType(typeof(TreinoResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CriarTreino([FromBody] TreinoCreateRequestDto treinoDto)
@@ -113,7 +26,7 @@ public class TreinoController : ControllerBase
 
         try
         {
-            TreinoResponseDto treino = await _treino.CriarAsync(treinoDto);
+            TreinoResponseDto treino = await _treinoService.CriarAsync(treinoDto);
             return CreatedAtAction(nameof(TreinoController.BuscarTreinoPorId), new { id = treino.Id }, treino);
         }
         catch (Exception e)
@@ -123,7 +36,7 @@ public class TreinoController : ControllerBase
     }
 
 
-    [HttpGet("treino/{id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(TreinoResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -131,7 +44,7 @@ public class TreinoController : ControllerBase
     {
         try
         {
-            var exercicio = await _treino.BuscarPorIdAsync(id);
+            var exercicio = await _treinoService.BuscarPorIdAsync(id);
 
             if (exercicio == null)
             {
@@ -144,5 +57,59 @@ public class TreinoController : ControllerBase
             return BadRequest($"Erro ao encontar o exercício pelo motivo: {e.Message}");
         }
     }
+
+
+    //[HttpGet("por")]
+    //[ProducesResponseType(typeof(TreinoResponseDto), StatusCodes.Status200OK)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //public async Task<IActionResult> BuscarTreinosPorEducadorFisico( [FromQuery] int educadorId )
+    //{
+    //    try
+    //    {
+    //        var exercicio = await _treinoService.BuscarPorIdAsync(id);
+
+    //        if (exercicio == null)
+    //        {
+    //            return NotFound();
+    //        }
+    //        return Ok(exercicio);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return BadRequest($"Erro ao encontar o exercício pelo motivo: {e.Message}");
+    //    }
+    //}
+
+    [HttpGet]
+    [ProducesResponseType(typeof(EdFisicoResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> BuscarTreinos(
+        [FromQuery] int skip = 0,
+        [FromQuery] int take = 10,
+        [FromQuery] int? educadorId = null,
+        [FromQuery] int? alunoId = null)
+    {
+
+        if (educadorId != null)
+        {
+            var treino = await _treinoService.BuscarPorEducadorFisicoIdAsync((int)educadorId);
+            if (treino == null)
+            {
+                return NotFound();
+            }
+            return Ok(treino);
+        }
+        if(alunoId != null)
+        {
+            var treino = await _treinoService.BuscarPorAlunoIdAsync((int)alunoId);
+            if (treino == null)
+            {
+                return NotFound();
+            }
+            return Ok(treino);
+        }
+        return Ok(await _treinoService.BuscarAsync(skip, take));
+    }
+
 }
 

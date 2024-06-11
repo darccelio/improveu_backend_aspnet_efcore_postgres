@@ -5,6 +5,7 @@ using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Models.Dtos.TreinoDto;
 using ImproveU_backend.Services.Interfaces.IPessoaSerivce;
 using ImproveU_backend.Services.Interfaces.ITreino;
+using ImproveU_backend.Services.PessoasServices;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing.Text;
 using System.Globalization;
@@ -90,10 +91,8 @@ public class TreinoService : ITreinoService
 
         if (treinoRequestDto.ItensTreino == null || treinoRequestDto.ItensTreino.Count == 0)
             throw new ArgumentException("O treino deve conter ao menos um item.", nameof(treinoRequestDto));
-
-
-
     }
+
     private async Task validaRequisitosItemTreino(ICollection<ItemTreinoCreateRequestDto> itensTreino)
     {
         foreach (var item in itensTreino)
@@ -109,18 +108,6 @@ public class TreinoService : ITreinoService
             if (ex is null)
                 throw new ArgumentException("Exercicio não localizado.", nameof(item.ExercicioId));
 
-
-            //if (item.Series == 0)
-            //    throw new ArgumentException("O campo Series é obrigatório.", nameof(item));
-
-            //if (item.Repeticoes == 0)
-            //    throw new ArgumentException("O campo Repetições é obrigatório.", nameof(item));
-
-            //if (item.CargaEmKg == 0)
-            //    throw new ArgumentException("O campo Carga é obrigatório.", nameof(item));
-
-            //if (item.IntervaloDescanso == 0)
-            //    throw new ArgumentException("O campo Descanso é obrigatório.", nameof(item));
         }
     }
 
@@ -131,14 +118,77 @@ public class TreinoService : ITreinoService
             throw new ArgumentException("Id do treino não pode ser menor ou igual a zero.");
         }
 
-        Treino treino = await _context.Treinos.AsNoTracking().FirstAsync(e => e.Id == id);
-        return _mapper.Map<TreinoResponseDto>(treino);
-    }
+        Treino? treino = await _context.Treinos.AsNoTracking()
+                                               .Include(it => it.ItensTreino)
+                                               .ThenInclude(e => e.Exercicio)
+                                               .Include(a => a.Aluno)
+                                               .Include(e => e.EdFisico)
+                                               .FirstOrDefaultAsync(e => e.Id == id);
 
+        if (treino is null)
+            throw new ArgumentException("Treino não encontrado");
+
+        TreinoResponseDto treinoResponseDto = _mapper.Map<TreinoResponseDto>(treino);
+
+        return treinoResponseDto;
+    }
+    
     public async Task<IEnumerable<TreinoResponseDto>> BuscarAsync(int skip, int take)
     {
         List<Treino> treinos = await _context.Treinos.AsNoTracking().Skip(skip).Take(take).ToListAsync();
         return _mapper.Map<IEnumerable<TreinoResponseDto>>(treinos);
+    }
+
+    public async Task<IEnumerable<TreinoResponseDto>> BuscarPorEducadorFisicoIdAsync(int edFisicoId)
+    {
+        if(edFisicoId <= 0)
+        {
+            throw new ArgumentException("Id do educador físico não pode ser menor ou igual a zero.");
+        }
+
+        EdFisico? edFisico = await _context.EdFisicos.AsNoTracking()
+                                                     .Include(t => t.Treinos)
+                                                     .ThenInclude(it => it.ItensTreino)
+                                                     .ThenInclude(e => e.Exercicio)
+                                                     .FirstOrDefaultAsync(e => e.Id == edFisicoId);
+
+        if (edFisico is null)
+        {
+            throw new ArgumentException("Educador físico não encontrado.");
+        }
+
+        if(!edFisico.Treinos.Any())
+        {
+            throw new Exception("Não há treinos cadastrados para este educador físico.");
+        }
+
+        return _mapper.Map<IEnumerable<TreinoResponseDto>>(edFisico.Treinos);
+    }
+
+    public async Task<IEnumerable<TreinoResponseDto>> BuscarPorAlunoIdAsync(int alunoId)
+    {
+        if (alunoId <= 0)
+        {
+            throw new ArgumentException("Id do educador físico não pode ser menor ou igual a zero.");
+        }
+
+        Aluno? aluno = await _context.Alunos.AsNoTracking()
+                                                     .Include(t => t.Treinos)
+                                                     .ThenInclude(it => it.ItensTreino)
+                                                     .ThenInclude(e => e.Exercicio)
+                                                     .FirstOrDefaultAsync(e => e.Id == alunoId);
+
+        if (aluno is null)
+        {
+            throw new ArgumentException("Educador físico não encontrado.");
+        }
+
+        if (!aluno.Treinos.Any())
+        {
+            throw new Exception("Não há treinos cadastrados para este educador físico.");
+        }
+
+        return _mapper.Map<IEnumerable<TreinoResponseDto>>(aluno.Treinos);
     }
 
 

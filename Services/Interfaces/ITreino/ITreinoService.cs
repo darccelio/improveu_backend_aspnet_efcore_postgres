@@ -7,7 +7,9 @@ public interface ITreinoService
 {
     Task<TreinoResponseDto> CriarAsync(TreinoCreateRequestDto treinoRequestDto);
     Task<TreinoResponseDto> BuscarPorIdAsync(int id);
-    //Task<IEnumerable<TreinoResponseDto>> BuscarAsync(int skip, int take);
+    Task<IEnumerable<TreinoResponseDto>> BuscarAsync(int skip, int take);
+    Task<IEnumerable<TreinoResponseDto>> BuscarPorEducadorFisicoIdAsync(int edFisicoId);
+    Task<IEnumerable<TreinoResponseDto>> BuscarPorAlunoIdAsync(int edFisicoId);
     //Task<TreinoResponseDto> AtualizarAsync(int id, TreinoUpdateRequestDto treinoRequestDto);
     //Task<bool> DeletarAsync(int id);
 

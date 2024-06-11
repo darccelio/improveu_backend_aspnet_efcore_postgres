@@ -11,8 +11,6 @@ public class AutomapperConfig : Profile
 {
     public AutomapperConfig()
     {
-
-
         CreateMap<Usuario, UsuarioResponseDto>();
         CreateMap<UsuarioCreateRequestDto, Usuario>();
         CreateMap<UsuarioUpdateRequestDto, Usuario>();
@@ -28,16 +26,27 @@ public class AutomapperConfig : Profile
 
         CreateMap<EdFisico, EdFisicoResponseDto>();
         CreateMap<EdFisicoCreateRequestDto, EdFisico>();
-        //CreateMap<EdFisicoUpdateRequestDto, EdFisico>();
-
 
         CreateMap<Exercicio, ExercicioResponseDto>();
         CreateMap<ExercicioCreateRequestDto, Exercicio>();
         CreateMap<ExercicioUpdateRequestDto, Exercicio>();
-        CreateMap<Treino, TreinoResponseDto>();
+
+        //CreateMap<Treino, TreinoResponseDto>();
+        //CreateMap<TreinoCreateRequestDto, Treino>();
+        //CreateMap<TreinoUpdateRequestDto, Treino>();
+
+        //CreateMap<ItemTreino, ItemTreinoResponseDto>();
+        //CreateMap<ItemTreinoCreateRequestDto, ItemTreino>();
+
+        CreateMap<Treino, TreinoResponseDto>()
+            .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.ItensTreino));
+
         CreateMap<TreinoCreateRequestDto, Treino>();
         CreateMap<TreinoUpdateRequestDto, Treino>();
-        CreateMap<ItemTreino, ItemTreinoResponseDto>();
+
+        CreateMap<ItemTreino, ItemTreinoResponseDto>()
+            .ForMember(dest => dest.Exercicio, opt => opt.MapFrom(src => src.Exercicio));
+
         CreateMap<ItemTreinoCreateRequestDto, ItemTreino>();
         //CreateMap<ItemTreinoUpdateRequestDto, ItemTreino>();
 
