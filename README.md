@@ -29,7 +29,7 @@ O objetivo do projeto ImproveU é viabilizar a mudança de estilo de vida para p
 	- Sistema Operacional Windows: abra a ferramenta Docker Desktop e verifique se o serviço está rodando (normalmente o serviço inicia-se com a abertura do Docker Desktop)
 	- Sistema Operacional Linux: abra o terminal e execute o comando `sudo systemctl start docker` para iniciar o serviço Docker.
 
-	- Abra o terminal e navague até o diretório do projeto onde está o arquivo `docker-compose.yml` e execute o comando `docker compose up`  para iniciar o serviço do banco de dados Postgres. Se rodar o comando acrescentando a flag `-d` no final, o serviço será iniciado em segundo plano, sem apresentar os logs no terminal (exemplo: `docker compose up -d`)
+	- Abra o terminal e navague até o diretório do projeto onde está o arquivo `docker-compose.yml` e execute o comando `sudo docker compose up`  para iniciar o serviço do banco de dados Postgres. Se rodar o comando acrescentando a flag `-d` no final, o serviço será iniciado em segundo plano, sem apresentar os logs no terminal (exemplo: `sudo docker compose up -d`)
 
 É possível executar o projeto através do Visual Studio 2022, Visual Studio Code ou através do terminal/Windows PowerShell. Abaixo estão os passos para executar o projeto conforme cada opção de ferramenta:
 	
