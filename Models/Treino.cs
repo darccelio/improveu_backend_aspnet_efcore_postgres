@@ -13,5 +13,6 @@ public class Treino : Base
     public DateTime? DataInicioVigencia { get; set; }
     public DateTime? DataFimVigencia { get; set; }
 
-    public virtual ICollection<ItemTreino> ItensTreino { get; set; }
+    public virtual ICollection<ItemTreinoARealizar> ItensTreinoARealizar { get; set; }
+    public virtual ICollection<ItemTreinoRealizados> ItensTreinoRealizos { get; set; }
 }

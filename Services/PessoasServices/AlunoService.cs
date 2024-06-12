@@ -61,8 +61,7 @@ public class AlunoService : IAlunoService
     {
         List<Aluno> alunos = await _context.Alunos.Include(aluno => aluno.Pessoa).AsNoTracking().Skip(skip).Take(take).ToListAsync();
 
-        List<AlunoResponseDto> alunoRespDto = _mapper.Map<List<AlunoResponseDto>>(alunos);
-        //return alunos.Select(aluno => new AlunoResponseDto(aluno));
+        List<AlunoResponseDto> alunoRespDto = _mapper.Map<List<AlunoResponseDto>>(alunos);        
         return alunoRespDto;
     }
 

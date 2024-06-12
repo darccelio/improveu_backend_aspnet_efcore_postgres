@@ -1,6 +1,6 @@
 ﻿namespace ImproveU_backend.Models;
 
-public class ItemTreino : Base
+public class ItemTreinoARealizar : Base
 {
     public int Id { get; set; }
     public int? CargaEmKg { get; set; } = null;
@@ -13,8 +13,4 @@ public class ItemTreino : Base
    
     public int  TreinoId { get; set; }
     public virtual Treino Treino { get; set; }
-
-    public int? FeedbackId{ get; set; }
-    public Feedback Feedback { get; set; }
-
 }

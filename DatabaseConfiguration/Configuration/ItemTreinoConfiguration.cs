@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ImproveU_backend.DatabaseConfiguration.Configuration;
 
-public class ItemTreinoConfiguration : IEntityTypeConfiguration<ItemTreino>
+public class ItemTreinoConfiguration : IEntityTypeConfiguration<ItemTreinoARealizar>
 {
-    public void Configure(EntityTypeBuilder<ItemTreino> builder)
+    public void Configure(EntityTypeBuilder<ItemTreinoARealizar> builder)
     {
         builder.ToTable("itens_treino");
         builder.HasKey(e => e.Id);

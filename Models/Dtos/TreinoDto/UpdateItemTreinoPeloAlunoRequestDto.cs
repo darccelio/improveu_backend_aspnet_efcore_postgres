@@ -1,8 +1,6 @@
-﻿using ImproveU_backend.Models.Dtos.TreinoDto;
+﻿namespace ImproveU_backend.Models.Dtos.TreinoDto;
 
-namespace ImproveU_backend.Models.Dtos;
-
-public record ItemTreinoResponseDto
+public record UpdateItemTreinoPeloAlunoRequestDto
 {
     public int Id { get; init; }
     public int TreinoId { get; init; }
@@ -13,6 +11,5 @@ public record ItemTreinoResponseDto
     public int? IntervaloDescanso { get; init; }
     public int? CargaEmKg { get; init; }
     public int? FeedbackId { get; init; }
-    public DateTime DataCriacao { get; init; }    
 }
 

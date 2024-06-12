@@ -6,5 +6,5 @@ public record TreinoResponseDto
     public string Nome { get; set; }
     public int EdFisicoId { get; set; }    
     public int AlunoId { get; set; }   
-    public List<ItemTreinoResponseDto> Itens { get; set; }
+    public List<ItemTreinoResponseDto> ItemTreinoResponseDto { get; set; }
 }

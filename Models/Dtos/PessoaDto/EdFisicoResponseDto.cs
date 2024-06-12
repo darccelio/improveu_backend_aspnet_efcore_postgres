@@ -4,7 +4,7 @@ public class EdFisicoResponseDto
 {
     public int Id { get; set; }
     public string RegistroConselho { get; set; }
-    public PessoaResponseDto Pessoa { get; set; }
+    public PessoaResponseDto PessoaRequest { get; set; }
 
     //public EdFisicoResponseDto(EdFisico edFisico)
     //{

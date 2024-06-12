@@ -14,7 +14,7 @@ public class ImproveuContext(DbContextOptions<ImproveuContext> _options) : DbCon
 
     public DbSet<Exercicio> Exercicios { get; set; }
     public DbSet<Treino> Treinos { get; set; }
-    public DbSet<ItemTreino> ItensTreinos { get; set; }
+    public DbSet<ItemTreinoARealizar> ItensTreinos { get; set; }
     public DbSet<Feedback> Feedbacks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

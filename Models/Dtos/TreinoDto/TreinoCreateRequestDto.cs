@@ -14,5 +14,5 @@ public record TreinoCreateRequestDto()
     public DateTime? DataFimVigencia { get; set; }
 
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
-    public virtual ICollection<ItemTreinoCreateRequestDto> ItensTreino { get; set; }
+    public virtual ICollection<ItemTreinoARealizarCreateRequestDto> ItemTreinoARealizarCreateRequestDto { get; set; }
 }

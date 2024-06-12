@@ -36,7 +36,7 @@ public class TreinoService : ITreinoService
     public async Task<TreinoResponseDto> CriarAsync(TreinoCreateRequestDto treinoRequestDto)
     {
         await validaRequisitosTreino(treinoRequestDto);
-        await validaRequisitosItemTreino(treinoRequestDto.ItensTreino);
+        await validaRequisitosItemTreino(treinoRequestDto.ItemTreinoARealizarCreateRequestDto);
 
         var treino = new Treino
         {
@@ -50,8 +50,8 @@ public class TreinoService : ITreinoService
         await _context.Treinos.AddAsync(treino);
         await _context.SaveChangesAsync();
 
-        ICollection<ItemTreino> itemTreinos = _mapper.Map<ICollection<ItemTreino>>(treinoRequestDto.ItensTreino);
-        //ICollection<ItemTreino> itemTreinos = _mapper.Map(treinoRequestDto.ItensTreino, treino.ItensTreino);
+        ICollection<ItemTreinoARealizar> itemTreinos = _mapper.Map<ICollection<ItemTreinoARealizar>>(treinoRequestDto.ItemTreinoARealizarCreateRequestDto);
+
         foreach (var item in itemTreinos)
         {
             item.TreinoId = treino.Id;
@@ -89,11 +89,11 @@ public class TreinoService : ITreinoService
                 throw new ArgumentException("Já existe um treino cadastrado com status ativo com essas datas de vigência.", nameof(treinoRequestDto));
         }
 
-        if (treinoRequestDto.ItensTreino == null || treinoRequestDto.ItensTreino.Count == 0)
+        if (treinoRequestDto.ItemTreinoARealizarCreateRequestDto == null || treinoRequestDto.ItemTreinoARealizarCreateRequestDto.Count == 0)
             throw new ArgumentException("O treino deve conter ao menos um item.", nameof(treinoRequestDto));
     }
 
-    private async Task validaRequisitosItemTreino(ICollection<ItemTreinoCreateRequestDto> itensTreino)
+    private async Task validaRequisitosItemTreino(ICollection<ItemTreinoARealizarCreateRequestDto> itensTreino)
     {
         foreach (var item in itensTreino)
         {
@@ -119,7 +119,7 @@ public class TreinoService : ITreinoService
         }
 
         Treino? treino = await _context.Treinos.AsNoTracking()
-                                               .Include(it => it.ItensTreino)
+                                               .Include(it => it.ItensTreinoARealizar)
                                                .ThenInclude(e => e.Exercicio)
                                                .Include(a => a.Aluno)
                                                .Include(e => e.EdFisico)
@@ -132,23 +132,23 @@ public class TreinoService : ITreinoService
 
         return treinoResponseDto;
     }
-    
+
     public async Task<IEnumerable<TreinoResponseDto>> BuscarAsync(int skip, int take)
     {
-        List<Treino> treinos = await _context.Treinos.AsNoTracking().Skip(skip).Take(take).ToListAsync();
+        List<Treino> treinos = await _context.Treinos.Include(i => i.ItensTreinoARealizar).ThenInclude(e => e.Exercicio).AsNoTracking().Skip(skip).Take(take).ToListAsync();
         return _mapper.Map<IEnumerable<TreinoResponseDto>>(treinos);
     }
 
     public async Task<IEnumerable<TreinoResponseDto>> BuscarPorEducadorFisicoIdAsync(int edFisicoId)
     {
-        if(edFisicoId <= 0)
+        if (edFisicoId <= 0)
         {
             throw new ArgumentException("Id do educador físico não pode ser menor ou igual a zero.");
         }
 
         EdFisico? edFisico = await _context.EdFisicos.AsNoTracking()
                                                      .Include(t => t.Treinos)
-                                                     .ThenInclude(it => it.ItensTreino)
+                                                     .ThenInclude(it => it.ItensTreinoARealizar)
                                                      .ThenInclude(e => e.Exercicio)
                                                      .FirstOrDefaultAsync(e => e.Id == edFisicoId);
 
@@ -157,7 +157,7 @@ public class TreinoService : ITreinoService
             throw new ArgumentException("Educador físico não encontrado.");
         }
 
-        if(!edFisico.Treinos.Any())
+        if (!edFisico.Treinos.Any())
         {
             throw new Exception("Não há treinos cadastrados para este educador físico.");
         }
@@ -169,27 +169,50 @@ public class TreinoService : ITreinoService
     {
         if (alunoId <= 0)
         {
-            throw new ArgumentException("Id do educador físico não pode ser menor ou igual a zero.");
+            throw new ArgumentException("Id do aluno não pode ser menor ou igual a zero.");
         }
 
         Aluno? aluno = await _context.Alunos.AsNoTracking()
                                                      .Include(t => t.Treinos)
-                                                     .ThenInclude(it => it.ItensTreino)
+                                                     .ThenInclude(it => it.ItensTreinoARealizar)
                                                      .ThenInclude(e => e.Exercicio)
                                                      .FirstOrDefaultAsync(e => e.Id == alunoId);
 
         if (aluno is null)
         {
-            throw new ArgumentException("Educador físico não encontrado.");
+            throw new ArgumentException("Aluno não encontrado.");
         }
 
         if (!aluno.Treinos.Any())
         {
-            throw new Exception("Não há treinos cadastrados para este educador físico.");
+            throw new Exception("Não há treinos cadastrados para este aluno.");
         }
 
         return _mapper.Map<IEnumerable<TreinoResponseDto>>(aluno.Treinos);
     }
 
+    public async Task<TreinoRealizadoResponseDto> RealizarTreino(int id, TreinoRealizadoCreateRequestDto treinoRealizadoCreateReqDto)
+    {
+        if (treinoRealizadoCreateReqDto == null)
+            throw new ArgumentNullException(nameof(treinoRealizadoCreateReqDto), "O objeto TreinoRealizadoResponseDto não pode ser nulo.");
+
+        if(id != treinoRealizadoCreateReqDto.TreinoId)
+            throw new ArgumentException($"Id enviado por parâmetro {id} não corresponde ao id do treino realizado.", nameof(treinoRealizadoCreateReqDto.TreinoId));
+
+        if (treinoRealizadoCreateReqDto.TreinoId <= 0)
+            throw new ArgumentException("Id do treino não pode ser menor ou igual a zero.", nameof(treinoRealizadoCreateReqDto.TreinoId));
+        
+        if(treinoRealizadoCreateReqDto.ItemTreinoRealizadoCreateReqDto == null || treinoRealizadoCreateReqDto.ItemTreinoRealizadoCreateReqDto.Count == 0)
+            throw new ArgumentException("O treino realizado deve conter ao menos um item.", nameof(treinoRealizadoCreateReqDto.ItemTreinoRealizadoCreateReqDto));
+
+
+        //Pode validar se os itens enviados correspondem a lista preparada pelo educador
+        //Pode validar se o treino está com status ativo
+        //Pode validar se o treino está dentro do período de vigência
+        //Pode validar se o treino já foi realizado
+        
+        throw NotImplementedException();
+    }
 
 }
+

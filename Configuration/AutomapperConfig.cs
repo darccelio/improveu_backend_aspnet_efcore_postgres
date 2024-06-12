@@ -20,35 +20,36 @@ public class AutomapperConfig : Profile
 
         CreateMap<Pessoa, Aluno>().ReverseMap();
         
-        CreateMap<Aluno, AlunoResponseDto>();
+
+        CreateMap<Aluno, AlunoResponseDto>()
+            .ForMember(dest => dest.PessoaRequest, opt => opt.MapFrom(src => src.Pessoa));
         CreateMap<AlunoCreateRequestDto, Aluno>();
         CreateMap<AlunoUpdateRequestDto, Aluno>();
 
-        CreateMap<EdFisico, EdFisicoResponseDto>();
-        CreateMap<EdFisicoCreateRequestDto, EdFisico>();
+        CreateMap<EdFisico, EdFisicoResponseDto>()
+            .ForMember(dest => dest.PessoaRequest, opt => opt.MapFrom(src => src.Pessoa));
+
+        CreateMap<EdFisicoCreateRequestDto, EdFisico>()
+            .ForMember(dest => dest.Pessoa, opt => opt.MapFrom(src => src.Pessoa));
 
         CreateMap<Exercicio, ExercicioResponseDto>();
         CreateMap<ExercicioCreateRequestDto, Exercicio>();
         CreateMap<ExercicioUpdateRequestDto, Exercicio>();
 
-        //CreateMap<Treino, TreinoResponseDto>();
-        //CreateMap<TreinoCreateRequestDto, Treino>();
-        //CreateMap<TreinoUpdateRequestDto, Treino>();
-
-        //CreateMap<ItemTreino, ItemTreinoResponseDto>();
-        //CreateMap<ItemTreinoCreateRequestDto, ItemTreino>();
-
         CreateMap<Treino, TreinoResponseDto>()
-            .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.ItensTreino));
+            .ForMember(dest => dest.ItemTreinoResponseDto, opt => opt.MapFrom(src => src.ItensTreinoARealizar));
 
-        CreateMap<TreinoCreateRequestDto, Treino>();
+        CreateMap<TreinoCreateRequestDto, Treino>()
+            .ForMember(dest => dest.ItensTreinoARealizar, opt => opt.MapFrom(src => src.ItemTreinoARealizarCreateRequestDto));
         CreateMap<TreinoUpdateRequestDto, Treino>();
 
-        CreateMap<ItemTreino, ItemTreinoResponseDto>()
+        CreateMap<ItemTreinoARealizar, ItemTreinoResponseDto>()
             .ForMember(dest => dest.Exercicio, opt => opt.MapFrom(src => src.Exercicio));
 
-        CreateMap<ItemTreinoCreateRequestDto, ItemTreino>();
+        CreateMap<ItemTreinoARealizarCreateRequestDto, ItemTreinoARealizar>();
         //CreateMap<ItemTreinoUpdateRequestDto, ItemTreino>();
+
+        
 
     }
 }
