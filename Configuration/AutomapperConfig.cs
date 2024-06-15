@@ -19,36 +19,43 @@ public class AutomapperConfig : Profile
         CreateMap<PessoaCreateRequestDto, Pessoa>();
 
         CreateMap<Pessoa, Aluno>().ReverseMap();
-        
-        CreateMap<Aluno, AlunoResponseDto>();
+
+
+        CreateMap<Aluno, AlunoResponseDto>()
+            .ForMember(dest => dest.PessoaRequest, opt => opt.MapFrom(src => src.Pessoa));
         CreateMap<AlunoCreateRequestDto, Aluno>();
         CreateMap<AlunoUpdateRequestDto, Aluno>();
 
-        CreateMap<EdFisico, EdFisicoResponseDto>();
-        CreateMap<EdFisicoCreateRequestDto, EdFisico>();
+        CreateMap<EdFisico, EdFisicoResponseDto>()
+            .ForMember(dest => dest.PessoaRequest, opt => opt.MapFrom(src => src.Pessoa));
+
+        CreateMap<EdFisicoCreateRequestDto, EdFisico>()
+            .ForMember(dest => dest.Pessoa, opt => opt.MapFrom(src => src.Pessoa));
 
         CreateMap<Exercicio, ExercicioResponseDto>();
         CreateMap<ExercicioCreateRequestDto, Exercicio>();
         CreateMap<ExercicioUpdateRequestDto, Exercicio>();
 
-        //CreateMap<Treino, TreinoResponseDto>();
-        //CreateMap<TreinoCreateRequestDto, Treino>();
-        //CreateMap<TreinoUpdateRequestDto, Treino>();
+        //Plano de Treino
+        CreateMap<TreinoARealizarCreateRequestDto, Treino>()
+            .ForMember(dest => dest.ItensTreinoARealizar, opt => opt.MapFrom(src => src.ItemTreinoARealizarCreateRequestDto));
 
-        //CreateMap<ItemTreino, ItemTreinoResponseDto>();
-        //CreateMap<ItemTreinoCreateRequestDto, ItemTreino>();
+        CreateMap<Treino, TreinoARealizarResponseDto>()
+            .ForMember(dest => dest.ItemTreinoARealizarResponseDto, opt => opt.MapFrom(src => src.ItensTreinoARealizar));
+                
+        CreateMap<ItensTreinoARealizarCreateRequestDto, ItemTreinoARealizar>();
 
-        CreateMap<Treino, TreinoResponseDto>()
-            .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.ItensTreino));
+        CreateMap<ItemTreinoARealizar, ItensTreinoARealizarResponseDto>()
+            .ForMember(dest => dest.Exercicio, opt => opt.MapFrom(src => src.ExercicioARealizar));
+                
+        //Treino Realizado
+        CreateMap<ItemTreinoRealizadoCreateRequestDto, ItemTreinoRealizados>();
 
-        CreateMap<TreinoCreateRequestDto, Treino>();
+        CreateMap<Treino, TreinoRealizadoResponseDto>()
+            .ForMember(dest => dest.ItemTreinoRealizadoResponseDto, opt => opt.MapFrom(src => src.ItensTreinoRealizados));
+
         CreateMap<TreinoUpdateRequestDto, Treino>();
 
-        CreateMap<ItemTreino, ItemTreinoResponseDto>()
-            .ForMember(dest => dest.Exercicio, opt => opt.MapFrom(src => src.Exercicio));
-
-        CreateMap<ItemTreinoCreateRequestDto, ItemTreino>();
-        //CreateMap<ItemTreinoUpdateRequestDto, ItemTreino>();
 
     }
 }

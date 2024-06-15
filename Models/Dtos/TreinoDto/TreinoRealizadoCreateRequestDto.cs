@@ -2,17 +2,17 @@
 
 namespace ImproveU_backend.Models.Dtos.TreinoDto;
 
-public record TreinoCreateRequestDto()
+public record TreinoRealizadoCreateRequestDto
 {
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
+    public int TreinoId { get; set; }
+
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public int EdFisicoId { get; set; }
 
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public int AlunoId { get; set; }
 
-    public DateTime? DataInicioVigencia { get; set; }
-    public DateTime? DataFimVigencia { get; set; }
-
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
-    public virtual ICollection<ItemTreinoCreateRequestDto> ItensTreino { get; set; }
+    public List<ItemTreinoRealizadoCreateRequestDto> ItemTreinoRealizadoCreateReqDto { get; set; }
 }

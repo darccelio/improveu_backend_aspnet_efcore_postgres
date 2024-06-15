@@ -9,6 +9,6 @@ public interface IExercicioService
     Task<ExercicioResponseDto> CriarAsync(ExercicioCreateRequestDto exericio);
     Task<ExercicioResponseDto> BuscarPorIdAsync(int id);
     Task<IEnumerable<ExercicioResponseDto>> BuscarAsync(int skip, int take);
-    Task<ExercicioResponseDto> BuscarPorNomeAsync(string nome);
+    Task<IEnumerable<ExercicioResponseDto>> BuscarPorNomeAsync(string nome, int skip = 0, int take = 10);
     Task Atualizar(int id, ExercicioUpdateRequestDto ex);
 }
