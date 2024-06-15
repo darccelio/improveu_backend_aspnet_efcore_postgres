@@ -14,7 +14,8 @@ public class ImproveuContext(DbContextOptions<ImproveuContext> _options) : DbCon
 
     public DbSet<Exercicio> Exercicios { get; set; }
     public DbSet<Treino> Treinos { get; set; }
-    public DbSet<ItemTreinoARealizar> ItensTreinos { get; set; }
+    public DbSet<ItemTreinoARealizar> ItensTreinosARealizar { get; set; }
+    public DbSet<ItemTreinoRealizados> ItensTreinosRealizados { get; set; }
     public DbSet<Feedback> Feedbacks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +27,10 @@ public class ImproveuContext(DbContextOptions<ImproveuContext> _options) : DbCon
         modelBuilder.ApplyConfiguration(new FotoConfiguration());
 
         modelBuilder.ApplyConfiguration(new ExercicioConfiguration());
-        modelBuilder.ApplyConfiguration(new ItemTreinoConfiguration());
+
+        modelBuilder.ApplyConfiguration(new ItemTreinoARealizarConfiguration());
+        modelBuilder.ApplyConfiguration(new ItemTreinoRealizadosConfiguration());
+
         modelBuilder.ApplyConfiguration(new TreinoConfiguration());
         modelBuilder.ApplyConfiguration(new FeedbackConfiguration());
 

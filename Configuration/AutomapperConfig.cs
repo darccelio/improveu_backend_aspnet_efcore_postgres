@@ -19,7 +19,7 @@ public class AutomapperConfig : Profile
         CreateMap<PessoaCreateRequestDto, Pessoa>();
 
         CreateMap<Pessoa, Aluno>().ReverseMap();
-        
+
 
         CreateMap<Aluno, AlunoResponseDto>()
             .ForMember(dest => dest.PessoaRequest, opt => opt.MapFrom(src => src.Pessoa));
@@ -36,20 +36,26 @@ public class AutomapperConfig : Profile
         CreateMap<ExercicioCreateRequestDto, Exercicio>();
         CreateMap<ExercicioUpdateRequestDto, Exercicio>();
 
-        CreateMap<Treino, TreinoResponseDto>()
-            .ForMember(dest => dest.ItemTreinoResponseDto, opt => opt.MapFrom(src => src.ItensTreinoARealizar));
-
-        CreateMap<TreinoCreateRequestDto, Treino>()
+        //Plano de Treino
+        CreateMap<TreinoARealizarCreateRequestDto, Treino>()
             .ForMember(dest => dest.ItensTreinoARealizar, opt => opt.MapFrom(src => src.ItemTreinoARealizarCreateRequestDto));
+
+        CreateMap<Treino, TreinoARealizarResponseDto>()
+            .ForMember(dest => dest.ItemTreinoARealizarResponseDto, opt => opt.MapFrom(src => src.ItensTreinoARealizar));
+                
+        CreateMap<ItensTreinoARealizarCreateRequestDto, ItemTreinoARealizar>();
+
+        CreateMap<ItemTreinoARealizar, ItensTreinoARealizarResponseDto>()
+            .ForMember(dest => dest.Exercicio, opt => opt.MapFrom(src => src.ExercicioARealizar));
+                
+        //Treino Realizado
+        CreateMap<ItemTreinoRealizadoCreateRequestDto, ItemTreinoRealizados>();
+
+        CreateMap<Treino, TreinoRealizadoResponseDto>()
+            .ForMember(dest => dest.ItemTreinoRealizadoResponseDto, opt => opt.MapFrom(src => src.ItensTreinoRealizados));
+
         CreateMap<TreinoUpdateRequestDto, Treino>();
 
-        CreateMap<ItemTreinoARealizar, ItemTreinoResponseDto>()
-            .ForMember(dest => dest.Exercicio, opt => opt.MapFrom(src => src.Exercicio));
-
-        CreateMap<ItemTreinoARealizarCreateRequestDto, ItemTreinoARealizar>();
-        //CreateMap<ItemTreinoUpdateRequestDto, ItemTreino>();
-
-        
 
     }
 }

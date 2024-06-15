@@ -3,6 +3,7 @@ using System;
 using ImproveU_backend.DatabaseConfiguration.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ImproveU_backend.Migrations
 {
     [DbContext(typeof(ImproveuContext))]
-    partial class ImproveuContextModelSnapshot : ModelSnapshot
+    [Migration("20240615195048_alterando tipo de data para date")]
+    partial class alterandotipodedataparadate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,15 +412,15 @@ namespace ImproveU_backend.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("data_criacao")
                         .HasDefaultValueSql("now()");
 
-                    b.Property<DateOnly?>("DataFimVigencia")
+                    b.Property<DateTime?>("DataFimVigencia")
                         .HasColumnType("DATE")
                         .HasColumnName("data_fim_vigencia");
 
-                    b.Property<DateOnly?>("DataInicioVigencia")
+                    b.Property<DateTime?>("DataInicioVigencia")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DATE")
                         .HasColumnName("data_inicio_vigencia")
@@ -436,7 +439,7 @@ namespace ImproveU_backend.Migrations
                     b.Property<DateTime?>("UltimaAlteracao")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ultima_atualizacao");
 
                     b.HasKey("Id");

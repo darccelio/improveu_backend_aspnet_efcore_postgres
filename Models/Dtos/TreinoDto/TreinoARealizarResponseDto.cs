@@ -1,6 +1,6 @@
 ﻿namespace ImproveU_backend.Models.Dtos.TreinoDto;
 
-public record TreinoRealizadoResponseDto
+public record TreinoARealizarResponseDto
 {
     public int Id { get; set; }
     public int EdFisicoId { get; set; }    

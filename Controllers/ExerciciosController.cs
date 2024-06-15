@@ -67,16 +67,18 @@ public class ExerciciosController : ControllerBase
     {
         try
         {
+            IEnumerable<ExercicioResponseDto> exercicios;
             if (!string.IsNullOrWhiteSpace(nome))
             {
-                var exercicio = await _exercicioService.BuscarPorNomeAsync(nome);
-                if (exercicio == null)
+                exercicios = await _exercicioService.BuscarPorNomeAsync(nome, skip, take);
+                if (exercicios == null)
                 {
                     return NotFound("Exercicio não localizado");
                 }
-                return Ok(exercicio);
+                return Ok(exercicios);
             }
-            var exercicios = await _exercicioService.BuscarAsync(skip, take);
+
+            exercicios = await _exercicioService.BuscarAsync(skip, take);
             return Ok(exercicios);
         }
         catch (Exception e)

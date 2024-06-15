@@ -4,6 +4,7 @@ using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos.TreinoDto;
 using ImproveU_backend.Services.Interfaces.ITreino;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
 namespace ImproveU_backend.Services.TreinoService;
@@ -39,8 +40,8 @@ public class ExercicioService : IExercicioService
         _context.SaveChanges();
 
         return _mapper.Map<ExercicioResponseDto>(novoExercicio);
-
     }
+
     public async Task<IEnumerable<ExercicioResponseDto>> BuscarAsync(int skip, int take)
     {
         List<Exercicio> exercicios = await _context.Exercicios.AsNoTracking().Skip(skip).Take(take).ToListAsync();
@@ -58,7 +59,7 @@ public class ExercicioService : IExercicioService
         return _mapper.Map<ExercicioResponseDto>(exercicio);
     }
 
-    public async Task<ExercicioResponseDto> BuscarPorNomeAsync(string nome)
+    public async Task<IEnumerable<ExercicioResponseDto>> BuscarPorNomeAsync(string nome, int skip = 0, int take = 10)
     {
 
         if (string.IsNullOrWhiteSpace(nome))
@@ -66,8 +67,11 @@ public class ExercicioService : IExercicioService
             throw new ArgumentException("Nome do exercicio não pode ser vazio.");
         }
 
-        Exercicio exercicio = await _context.Exercicios.AsNoTracking().FirstAsync(e => e.Nome == nome);
-        return _mapper.Map<ExercicioResponseDto>(exercicio);
+        IEnumerable<Exercicio> exercicios = await _context.Exercicios.AsNoTracking()
+                                                                    .Where(e => e.Nome.ToLower().Contains(nome.ToLower()))
+                                                                    .Skip(skip).Take(take).ToListAsync();
+
+        return _mapper.Map<IEnumerable<ExercicioResponseDto>>(exercicios);
     }
 
     public async Task Atualizar(int id, ExercicioUpdateRequestDto ex)

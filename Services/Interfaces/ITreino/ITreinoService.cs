@@ -5,10 +5,11 @@ namespace ImproveU_backend.Services.Interfaces.ITreino;
 
 public interface ITreinoService
 {
-    Task<TreinoResponseDto> CriarAsync(TreinoCreateRequestDto treinoRequestDto);
-    Task<TreinoResponseDto> BuscarPorIdAsync(int id);
-    Task<IEnumerable<TreinoResponseDto>> BuscarAsync(int skip, int take);
-    Task<IEnumerable<TreinoResponseDto>> BuscarPorEducadorFisicoIdAsync(int edFisicoId);
-    Task<IEnumerable<TreinoResponseDto>> BuscarPorAlunoIdAsync(int edFisicoId);
-    Task<TreinoRealizadoResponseDto> RealizarTreino(int id, TreinoRealizadoCreateRequestDto treinoRealizadoCreateReqDto);
+    Task<TreinoARealizarResponseDto> CriarPlanoDeTreinoAsync(TreinoARealizarCreateRequestDto treinoRequestDto);
+    Task<TreinoARealizarResponseDto> BuscarPorIdAsync(int id);
+    Task<IEnumerable<TreinoARealizarResponseDto>> BuscarAsync(int skip, int take);
+    Task<IEnumerable<TreinoARealizarResponseDto>> BuscarPlanoAtivoPorEducadorFisicoIdAsync(int edFisicoId, int skip, int take);
+    Task<IEnumerable<TreinoARealizarResponseDto>> BuscarPlanoAtivoPorAlunoIdAsync(int edFisicoId, int skip, int take);
+    Task<TreinoARealizarResponseDto> RealizarTreinoAsync(TreinoRealizadoCreateRequestDto treinoRealizadoCreateReqDto);
+
 }

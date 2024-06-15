@@ -2,7 +2,7 @@
 
 namespace ImproveU_backend.Models.Dtos;
 
-public record ItemTreinoResponseDto
+public record ItensTreinoARealizarResponseDto
 {
     public int Id { get; init; }
     public int TreinoId { get; init; }
