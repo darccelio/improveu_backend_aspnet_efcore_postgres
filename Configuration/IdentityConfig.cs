@@ -41,7 +41,7 @@ public static class IdentityConfig
         }).AddJwtBearer(j =>
         {
             j.RequireHttpsMetadata = false; //obrigar uso do https
-            j.SaveToken = false; //salvar token no httpcontext para ser mais fácil a validação após apresentação do token
+            j.SaveToken = true; //salvar token no httpcontext para ser mais fácil a validação após apresentação do token
             j.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,  //validar o emissor do token

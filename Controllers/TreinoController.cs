@@ -39,7 +39,7 @@ public class TreinoController : ControllerBase
     }
 
 
-    [ClaimsAuthorize("educador", "ler")]
+    
     [HttpGet("planos-por-id")]
     [ProducesResponseType(typeof(TreinoARealizarResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
