@@ -11,9 +11,10 @@ public class AutomapperConfig : Profile
 {
     public AutomapperConfig()
     {
-        CreateMap<Usuario, UsuarioResponseDto>();
-        CreateMap<UsuarioCreateRequestDto, Usuario>();
-        CreateMap<UsuarioUpdateRequestDto, Usuario>();
+        //CreateMap<Usuario, UsuarioResponseDto>();
+        //CreateMap<UsuarioCreateRequestDto, Usuario>();
+        //CreateMap<UsuarioUpdateRequestDto, Usuario>();
+        //CreateMap<UsuarioCreateRequestDto, UsuarioResponseDto>();
 
         CreateMap<Pessoa, PessoaResponseDto>();
         CreateMap<PessoaCreateRequestDto, Pessoa>();

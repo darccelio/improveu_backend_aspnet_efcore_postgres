@@ -24,11 +24,24 @@ public class PessoaDbConfiguration : IEntityTypeConfiguration<Pessoa>
 
         builder.Property(e => e.Cpf).HasColumnName("cpf")
                                     .HasColumnType("varchar(11)")
-                                    .IsRequired();
+                                    .IsRequired();        
 
-        builder.Property(e => e.UsuarioId).HasColumnName("usuario_id")
-                                          .HasColumnType("int")
-                                          .IsRequired();
+        //builder.Property(e => e.Ativo).HasColumnName("ativo")
+        //                              .HasColumnType("int")
+        //                              .IsRequired();
+
+        //builder.Property(e => e.Papel).HasColumnName("tipo_pessoa")
+        //                              .HasColumnType("int")
+        //                              .IsRequired();
+
+        builder.Property(e => e.IdentityUserId).HasColumnName("identity_user_id")
+                                               .HasColumnType("varchar(255)")
+                                               .IsRequired();
+
+        //builder.Property(e => e.UsuarioId).HasColumnName("usuario_id")
+        //                                  .HasColumnType("int")
+        //                                  .IsRequired();
+
 
         builder.Property(e => e.DataCriacao).HasColumnName("data_criacao")
                                             .HasColumnType("TIMESTAMP")
@@ -52,6 +65,12 @@ public class PessoaDbConfiguration : IEntityTypeConfiguration<Pessoa>
         builder.HasMany(f => f.Fotos)
                .WithOne(p => p.Pessoa)
                .HasForeignKey(f => f.PessoaId);
+
+        ////relacionamentos fk na tabela usuarios identity
+        builder.HasOne(e => e.IdentityAppUser)
+               .WithOne(p => p.Pessoa)
+               .HasForeignKey<Pessoa>(e => e.IdentityUserId);
+
     }
 
 }

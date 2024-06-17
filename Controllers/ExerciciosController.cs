@@ -6,9 +6,12 @@ using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Services.Interfaces.ITreino;
 using ImproveU_backend.Models.Dtos.TreinoDto;
+using ImproveU_backend.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ImproveU_backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/exercicios")]
 public class ExerciciosController : ControllerBase
@@ -20,6 +23,7 @@ public class ExerciciosController : ControllerBase
         _exercicioService = exercicio;
     }
 
+    [ClaimsAuthorize("educador", "criar")]
     [HttpPost]
     [ProducesResponseType(typeof(ExercicioResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -87,6 +91,7 @@ public class ExerciciosController : ControllerBase
         }
     }
 
+    [ClaimsAuthorize("educador", "editar")]
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

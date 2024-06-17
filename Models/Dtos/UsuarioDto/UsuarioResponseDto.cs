@@ -2,17 +2,17 @@
 
 public record UsuarioResponseDto
 {
-    public UsuarioResponseDto(Usuario usuario)
-    {
-        Id = usuario?.Id.ToString();
-        Email = usuario?.Email;
-        Papel = usuario?.Papel;
-        Ativo = usuario?.Ativo;
-        DataCriacao = usuario?.DataCriacao.ToShortDateString();
+    //public UsuarioResponseDto(Usuario usuario)
+    //{
+    //    Id = usuario?.Id.ToString();
+    //    Email = usuario?.Email;
+    //    Papel = usuario?.Papel;
+    //    Ativo = usuario?.Ativo;
+    //    DataCriacao = usuario?.DataCriacao.ToShortDateString();
 
-        if (usuario.UltimaAlteracao is not null)
-            UltimaAlteracao = usuario.UltimaAlteracao?.ToShortDateString();
-    }
+    //    if (usuario.UltimaAlteracao is not null)
+    //        UltimaAlteracao = usuario.UltimaAlteracao?.ToShortDateString();
+    //}
 
     public string? Id { get; set; }
 

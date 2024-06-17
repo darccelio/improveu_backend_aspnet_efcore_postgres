@@ -46,6 +46,7 @@ builder.Services.AddDbContext<ImproveuContext>(options =>
         .EnableSensitiveDataLogging()
         .LogTo(Console.WriteLine, LogLevel.Information));
 
+builder.Services.AddIdentityConfiguration(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -114,6 +115,7 @@ else
                                  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
     );
 }
+
 app.UseRouting();
 app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -123,6 +125,5 @@ app.MapControllers();
 
 // Configurar fuso horário padrão para UTC em todo o aplicativo
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 
 app.Run();

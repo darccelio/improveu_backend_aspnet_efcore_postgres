@@ -32,18 +32,15 @@ public class AlunoService : IAlunoService
         if (pessoaDto is not null)
             throw new ArgumentException("Pessoa já cadastrada.");
 
-        var usuarioPapel = await _context.Usuarios
-                .Where(u => u.Id == alunoRequest.PessoaCreateRequest.UsuarioId)
-                .Select(u => u.Papel)
-                .FirstOrDefaultAsync();
+        //var usuarioPapel = await _context.Usuarios
+        //        .Where(u => u.Id == alunoRequest.PessoaCreateRequest.UsuarioId)
+        //        .Select(u => u.Papel)
+        //        .FirstOrDefaultAsync();
 
-        if (usuarioPapel != 1)
-            throw new ArgumentException("O usuário vinculado não possui papel de aluno.");
+        //if (usuarioPapel != 1)
+        //    throw new ArgumentException("O usuário vinculado não possui papel de aluno.");
 
-        Pessoa pessoa = new Pessoa(alunoRequest.PessoaCreateRequest.Cpf,
-                alunoRequest.PessoaCreateRequest.Nome,
-                alunoRequest.PessoaCreateRequest.UsuarioId);
-
+        Pessoa pessoa = _mapper.Map<Pessoa>(alunoRequest);
         _context.Pessoas.Add(pessoa);
 
         Aluno novoAluno = new Aluno() { Pessoa = pessoa, PessoaId = pessoa.Id };
@@ -61,7 +58,7 @@ public class AlunoService : IAlunoService
     {
         List<Aluno> alunos = await _context.Alunos.Include(aluno => aluno.Pessoa).AsNoTracking().Skip(skip).Take(take).ToListAsync();
 
-        List<AlunoResponseDto> alunoRespDto = _mapper.Map<List<AlunoResponseDto>>(alunos);        
+        List<AlunoResponseDto> alunoRespDto = _mapper.Map<List<AlunoResponseDto>>(alunos);
         return alunoRespDto;
     }
 

@@ -21,14 +21,14 @@ public class PessoaService : IPessoaService
 
     public async Task<PessoaResponseDto> CriarAsync(PessoaCreateRequestDto pessoaRequest)
     {
-        Pessoa? pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.Cpf == pessoaRequest.Cpf && p.UsuarioId == pessoaRequest.UsuarioId);
+        Pessoa? pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.Cpf == pessoaRequest.Cpf && p.IdentityUserId == pessoaRequest.IdentityUserId);
 
         if (pessoa != null)
         {
             throw new ArgumentException("Pessoa já cadastrada.");
         }
 
-        pessoa = new Pessoa(pessoaRequest.Cpf, pessoaRequest.Nome, pessoaRequest.UsuarioId);
+        pessoa = _mapper.Map<Pessoa>(pessoaRequest);
 
         if (pessoa is null)
         {
@@ -38,7 +38,6 @@ public class PessoaService : IPessoaService
         _context.Pessoas.Add(pessoa);
 
         await _context.SaveChangesAsync();
-        //var pessoaDtoResp = new PessoaResponseDto(pessoa);
 
         PessoaResponseDto pessoaDtoResp = _mapper.Map<PessoaResponseDto>(pessoa);
         return pessoaDtoResp;
