@@ -51,11 +51,7 @@ builder.Services.AddDbContext<ImproveuContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 
-// Add Swagger services
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ImproveU API", Version = "v1" });
-});
+builder.Services.AddSwaggerConfig();
 
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {

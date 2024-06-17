@@ -1,4 +1,5 @@
-﻿using ImproveU_backend.Services.Interfaces.INotificacoesServices;
+﻿using ImproveU_backend.Extensions;
+using ImproveU_backend.Services.Interfaces.INotificacoesServices;
 using ImproveU_backend.Services.Interfaces.IPessoaServices;
 using ImproveU_backend.Services.Interfaces.ITreinoServices;
 using ImproveU_backend.Services.Interfaces.IUsuarioServices;
@@ -25,6 +26,11 @@ public static class DependencyInjectionConfig
 
         services.AddScoped<INotificadorService, NotificadorServices>();
         services.AddScoped<IUser, UserService>();
+
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IUser, AspNetUser>();
+
+        //services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
         return services;
     }

@@ -61,6 +61,7 @@ public class ExerciciosController : ControllerBase
         }
     }
 
+    [ClaimsAuthorize("educador", "ler")]
     [HttpGet]
     [ProducesResponseType(typeof(ExercicioResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
