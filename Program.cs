@@ -37,6 +37,7 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 52428800; // 50 MB
 });
 
+builder.Services.AddIdentityConfiguration(builder.Configuration);
 
 // Add DbContext
 builder.Services.AddDbContext<ImproveuContext>(options =>

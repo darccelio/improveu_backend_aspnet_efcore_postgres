@@ -1,9 +1,12 @@
+using ImproveU_backend.Extensions;
 using ImproveU_backend.Models.Dtos.PessoaDto;
-using ImproveU_backend.Services.Interfaces.IPessoaSerivce;
+using ImproveU_backend.Services.Interfaces.IPessoaServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ImproveU_backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/educadorfisico")]
 public class EdFisicoController : ControllerBase
@@ -15,6 +18,7 @@ public class EdFisicoController : ControllerBase
         _edFisicoService = edFisicoService;
     }
 
+    [ClaimsAuthorize("educador", "criar")]
     [HttpPost]
     [ProducesResponseType(typeof(EdFisicoResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,6 +37,7 @@ public class EdFisicoController : ControllerBase
         }
     }
 
+    [ClaimsAuthorize("admin", "ler")]
     [HttpGet]
     [ProducesResponseType(typeof(EdFisicoResponseDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> Buscar(
@@ -42,6 +47,7 @@ public class EdFisicoController : ControllerBase
         return Ok(await _edFisicoService.BuscarAsync(skip, take));
     }
 
+    [ClaimsAuthorize("admin", "ler")]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(EdFisicoResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

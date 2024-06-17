@@ -2,12 +2,12 @@
 using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos.TreinoDto;
-using ImproveU_backend.Services.Interfaces.ITreino;
+using ImproveU_backend.Services.Interfaces.ITreinoServices;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
-namespace ImproveU_backend.Services.TreinoService;
+namespace ImproveU_backend.Services.TreinoServices;
 
 public class ExercicioService : IExercicioService
 {

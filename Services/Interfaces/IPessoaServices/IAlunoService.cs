@@ -1,6 +1,6 @@
 ﻿using ImproveU_backend.Models.Dtos.PessoaDto;
 
-namespace ImproveU_backend.Services.Interfaces.IPessoaSerivce;
+namespace ImproveU_backend.Services.Interfaces.IPessoaServices;
 
 public interface IAlunoService
 {

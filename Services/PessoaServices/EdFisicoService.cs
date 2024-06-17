@@ -3,7 +3,7 @@ using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos.PessoaDto;
 using ImproveU_backend.Models.Dtos.UsuarioDto;
-using ImproveU_backend.Services.Interfaces.IPessoaSerivce;
+using ImproveU_backend.Services.Interfaces.IPessoaServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace ImproveU_backend.Services.PessoasServices;

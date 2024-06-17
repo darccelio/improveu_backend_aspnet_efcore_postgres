@@ -1,5 +1,7 @@
-﻿using ImproveU_backend.Models.Dtos.PessoaDto;
-using ImproveU_backend.Services.Interfaces.IPessoaSerivce;
+﻿using ImproveU_backend.Extensions;
+using ImproveU_backend.Models.Dtos.PessoaDto;
+using ImproveU_backend.Services.Interfaces.IPessoaServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ImproveU_backend.Controllers
 {
+    [Authorize]
     [Route("api/alunos")]
     [ApiController]
     public class AlunosController : ControllerBase
@@ -19,7 +22,7 @@ namespace ImproveU_backend.Controllers
             _alunoService = alunoService;
         }
 
-        // POST api/<AlunoController>
+        [ClaimsAuthorize("aluno", "criar")]
         [HttpPost]
         [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,8 +42,7 @@ namespace ImproveU_backend.Controllers
 
         }
 
-
-        // GET: api/<AlunoController>
+        [ClaimsAuthorize("educador", "ler")]
         [HttpGet]
         [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Buscar(
@@ -50,7 +52,7 @@ namespace ImproveU_backend.Controllers
             return Ok(await _alunoService.BuscarAsync(skip, take));
         }
 
-        // GET api/<AlunoController>/5
+        [ClaimsAuthorize("educador", "ler")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -63,9 +65,7 @@ namespace ImproveU_backend.Controllers
             return Ok(edFisico);
         }
 
-
-
-        // PUT api/<AlunoController>/5
+        [ClaimsAuthorize("aluno", "ler")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -83,7 +83,7 @@ namespace ImproveU_backend.Controllers
 
         }
 
-        // DELETE api/<AlunoController>/5
+        [ClaimsAuthorize("educador", "ler")]
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -1,7 +1,7 @@
 ﻿using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos.TreinoDto;
 
-namespace ImproveU_backend.Services.Interfaces.ITreino;
+namespace ImproveU_backend.Services.Interfaces.ITreinoServices;
 
 
 public interface IExercicioService

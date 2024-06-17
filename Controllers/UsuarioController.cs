@@ -1,5 +1,5 @@
 ﻿using ImproveU_backend.Models.Dtos.UsuarioDto;
-using ImproveU_backend.Services.Interfaces.IUsuarioService;
+using ImproveU_backend.Services.Interfaces.IUsuarioServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ImproveU_backend.Controllers;
@@ -8,9 +8,9 @@ namespace ImproveU_backend.Controllers;
 [Route("api/usuarios")]
 public class UsuarioController : ControllerBase
 {
-    private readonly IUsuarioService _usuarioService;
+    private readonly IUsuarioServices _usuarioService;
 
-    public UsuarioController(IUsuarioService usuarioService)
+    public UsuarioController(IUsuarioServices usuarioService)
     {
         _usuarioService = usuarioService;
     }

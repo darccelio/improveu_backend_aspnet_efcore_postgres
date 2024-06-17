@@ -3,10 +3,12 @@ using ImproveU_backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using ImproveU_backend.Models.Dtos.PessoaDto;
-using ImproveU_backend.Services.Interfaces.IPessoaSerivce;
+using ImproveU_backend.Services.Interfaces.IPessoaServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ImproveU_backend.Controllers;
 
+[Authorize]
 [Route("api/fotos")]
 [ApiController]
 public class FotosController : ControllerBase

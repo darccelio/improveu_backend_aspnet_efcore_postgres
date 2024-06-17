@@ -1,16 +1,18 @@
-﻿using ImproveU_backend.Models;
+﻿using ImproveU_backend.Extensions;
+using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos.PessoaDto;
 using ImproveU_backend.Models.Dtos.TreinoDto;
-using ImproveU_backend.Services.Interfaces.ITreino;
+using ImproveU_backend.Services.Interfaces.ITreinoServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ImproveU_backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/treinos")]
 public class TreinoController : ControllerBase
 {
-
     private readonly ITreinoService _treinoService;
 
     public TreinoController(ITreinoService service)
@@ -18,7 +20,7 @@ public class TreinoController : ControllerBase
         _treinoService = service;
     }
 
-
+    [ClaimsAuthorize("educador", "criar")]
     [HttpPost("plano")]
     [ProducesResponseType(typeof(TreinoARealizarResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -36,7 +38,9 @@ public class TreinoController : ControllerBase
         }
     }
 
-    [HttpGet("planos")]
+
+    [ClaimsAuthorize("educador", "ler")]
+    [HttpGet("planos-por-id")]
     [ProducesResponseType(typeof(TreinoARealizarResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,7 +71,6 @@ public class TreinoController : ControllerBase
         return BadRequest("Nenhum Id foi enviado por parâmetro para realizar a busca");
     }
 
-
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(TreinoARealizarResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -90,15 +93,17 @@ public class TreinoController : ControllerBase
         }
     }
 
+
     [HttpGet]
-    [ProducesResponseType(typeof(EdFisicoResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TreinoARealizarResponseDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> BuscarTreinos(
         [FromQuery] int skip = 0,
         [FromQuery] int take = 10)
-    { 
+    {
         return Ok(await _treinoService.BuscarAsync(skip, take));
     }
 
+    [ClaimsAuthorize("aluno", "criar")]
     [HttpPost("realizar")]
     [ProducesResponseType(typeof(TreinoARealizarResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

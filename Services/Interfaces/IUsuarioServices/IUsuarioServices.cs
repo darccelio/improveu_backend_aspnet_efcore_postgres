@@ -1,8 +1,8 @@
 ﻿using ImproveU_backend.Models.Dtos.UsuarioDto;
 
-namespace ImproveU_backend.Services.Interfaces.IUsuarioService;
+namespace ImproveU_backend.Services.Interfaces.IUsuarioServices;
 
-public interface IUsuarioService
+public interface IUsuarioServices
 {
     public Task<UsuarioResponseDto> CriarAsync(UsuarioCreateRequestDto usuarioRequest);
     public Task<UsuarioResponseDto> BuscarPorIdAsync(int id);

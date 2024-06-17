@@ -1,7 +1,7 @@
 ﻿using ImproveU_backend.Models.Dtos.PessoaDto;
 using ImproveU_backend.Models.Dtos.UsuarioDto;
 
-namespace ImproveU_backend.Services.Interfaces.IPessoaSerivce;
+namespace ImproveU_backend.Services.Interfaces.IPessoaServices;
 
 
 public interface IEdFisicoService

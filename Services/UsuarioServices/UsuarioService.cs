@@ -1,18 +1,21 @@
-﻿using ImproveU_backend.DatabaseConfiguration.Configuration;
+﻿using AutoMapper;
+using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos.UsuarioDto;
-using ImproveU_backend.Services.Interfaces.IUsuarioService;
+using ImproveU_backend.Services.Interfaces.IUsuarioServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace ImproveU_backend.Services.UsuarioService;
 
-public class UsuarioService : IUsuarioService
+public class UsuarioService : IUsuarioServices
 {
     private readonly ImproveuContext _context;
+    private readonly IMapper _mapper;
 
-    public UsuarioService(ImproveuContext context)
+    public UsuarioService(ImproveuContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<UsuarioResponseDto> CriarAsync(UsuarioCreateRequestDto usuarioRequest)
@@ -29,8 +32,7 @@ public class UsuarioService : IUsuarioService
         _context.Usuarios.Add(novoUsuario);
         _context.SaveChanges();
 
-        UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(novoUsuario);
-        return usuarioResponseDto;
+        return _mapper.Map<UsuarioResponseDto>(usuario);
     }
 
 
@@ -38,13 +40,13 @@ public class UsuarioService : IUsuarioService
     {
         List<Usuario> usuarios = await _context.Usuarios.AsNoTracking().Skip(skip).Take(take).ToListAsync();
 
-        return usuarios.Select(u => new UsuarioResponseDto(u));
+        return _mapper.Map<IEnumerable<UsuarioResponseDto>>(usuarios);
     }
 
     public async Task<UsuarioResponseDto> BuscarPorIdAsync(int id)
     {
         var usuario = await GetUsuarioPorIdAsync(id);
-        return new UsuarioResponseDto(usuario);
+        return _mapper.Map<UsuarioResponseDto>(usuario);
     }
 
     private async Task<Usuario> GetUsuarioPorIdAsync(int id)
@@ -64,7 +66,7 @@ public class UsuarioService : IUsuarioService
     {
         Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
         if (usuario == null) throw new ArgumentException("Usuário não encontrado.");
-        return new UsuarioResponseDto(usuario);
+        return _mapper.Map<UsuarioResponseDto>(usuario);
     }
 
     public async Task<bool> AtualizarAsync(int id, UsuarioUpdateRequestDto usuarioRequest)
@@ -83,7 +85,6 @@ public class UsuarioService : IUsuarioService
                 await _context.SaveChangesAsync();
                 return true;
             }
-
             return false;
         }
         catch (IOException e)

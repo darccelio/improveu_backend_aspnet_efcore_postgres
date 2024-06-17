@@ -3,14 +3,14 @@ using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos;
 using ImproveU_backend.Models.Dtos.TreinoDto;
-using ImproveU_backend.Services.Interfaces.IPessoaSerivce;
-using ImproveU_backend.Services.Interfaces.ITreino;
+using ImproveU_backend.Services.Interfaces.IPessoaServices;
+using ImproveU_backend.Services.Interfaces.ITreinoServices;
 using ImproveU_backend.Services.PessoasServices;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing.Text;
 using System.Globalization;
 
-namespace ImproveU_backend.Services.TreinoService;
+namespace ImproveU_backend.Services.TreinoServices;
 
 public class TreinoService : ITreinoService
 {
