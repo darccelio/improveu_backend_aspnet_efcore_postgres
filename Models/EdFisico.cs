@@ -14,18 +14,5 @@ public class EdFisico : Base
 
     public virtual ICollection<Treino> Treinos { get; set; }
 
-    public virtual ICollection<Feedback> Feedbacks { get; set; }
-
-    public EdFisico(string? registroConselho, int pessoaId)
-    {
-        RegistroConselho = registroConselho;
-        PessoaId = pessoaId;
-    }
-
-    public EdFisico(string? registroConselho, Pessoa pessoa)
-    {
-        RegistroConselho = registroConselho;
-        Pessoa = pessoa;
-        PessoaId = pessoa.Id;
-    }
+    public virtual ICollection<Feedback> Feedbacks { get; set; }    
 }

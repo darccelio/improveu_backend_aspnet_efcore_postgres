@@ -3,6 +3,7 @@ using ImproveU_backend.DatabaseConfiguration.Configuration;
 using ImproveU_backend.Models;
 using ImproveU_backend.Models.Dtos.PessoaDto;
 using ImproveU_backend.Services.Interfaces.IPessoaServices;
+using ImproveU_backend.Services.Interfaces.IUsuarioServices;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
@@ -13,47 +14,31 @@ public class AlunoService : IAlunoService
     private readonly ImproveuContext _context;
     private readonly IPessoaService _pessoaService;
     private readonly IMapper _mapper;
+    private readonly IUser _user;
 
-    public AlunoService(ImproveuContext context, IPessoaService pessoaService, IMapper mapper)
+    public AlunoService(ImproveuContext context, IPessoaService pessoaService, IMapper mapper, IUser user)
     {
         _context = context;
         _pessoaService = pessoaService;
         _mapper = mapper;
+        _user = user;
     }
 
     public async Task<AlunoResponseDto> CriarAsync(AlunoCreateRequestDto alunoRequest)
     {
-
         if (alunoRequest is null)
             throw new ArgumentNullException(nameof(alunoRequest), "O objeto AlunoCreateRequestDto não pode ser nulo.");
 
-        PessoaResponseDto? pessoaDto = await _pessoaService.BuscarPorCpfAsync(alunoRequest.PessoaCreateRequest.Cpf);
+        PessoaResponseDto pessoaResponseDto = await _pessoaService.BuscarPorCpfAsync(alunoRequest.PessoaCreateRequest.Cpf);
+        if(pessoaResponseDto is null)
+            pessoaResponseDto = await _pessoaService.CriarAsync(alunoRequest.PessoaCreateRequest, new Tuple<string, string>("aluno", "criar"));
 
-        if (pessoaDto is not null)
-            throw new ArgumentException("Pessoa já cadastrada.");
-
-        var usuarioPapel = await _context.Usuarios
-                .Where(u => u.Id == alunoRequest.PessoaCreateRequest.UsuarioId)
-                .Select(u => u.Papel)
-                .FirstOrDefaultAsync();
-
-        if (usuarioPapel != 1)
-            throw new ArgumentException("O usuário vinculado não possui papel de aluno.");
-
-        Pessoa pessoa = new Pessoa(alunoRequest.PessoaCreateRequest.Cpf,
-                alunoRequest.PessoaCreateRequest.Nome,
-                alunoRequest.PessoaCreateRequest.UsuarioId);
-
-        _context.Pessoas.Add(pessoa);
-
-        Aluno novoAluno = new Aluno() { Pessoa = pessoa, PessoaId = pessoa.Id };
+        Aluno novoAluno = new Aluno() { PessoaId = pessoaResponseDto.Id };
 
         await _context.Alunos.AddAsync(novoAluno);
         await _context.SaveChangesAsync();
 
         AlunoResponseDto alunoRespDto = _mapper.Map<AlunoResponseDto>(novoAluno);
-
-        //AlunoResponseDto alunoRespDto = new AlunoResponseDto(novoAluno);
         return alunoRespDto;
     }
 

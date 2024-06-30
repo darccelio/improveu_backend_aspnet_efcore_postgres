@@ -140,7 +140,7 @@ public class TreinoService : ITreinoService
                                                         .ThenInclude(it => it.ItensTreinoARealizar)
                                                             .ThenInclude(e => e.ExercicioARealizar)
                                                      .Include(p => p.Pessoa)
-                                                        .ThenInclude(u => u.Usuario)
+                                                        //.ThenInclude(u => u.Usuario)
                                                      .Where(e => e.Id == alunoId)
                                                      .Skip(skip).Take(take)
                                                      .FirstOrDefaultAsync();

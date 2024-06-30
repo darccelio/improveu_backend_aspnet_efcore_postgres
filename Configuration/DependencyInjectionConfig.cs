@@ -7,7 +7,7 @@ using ImproveU_backend.Services.NotificacoesServices;
 using ImproveU_backend.Services.PessoaServices;
 using ImproveU_backend.Services.PessoasServices;
 using ImproveU_backend.Services.TreinoServices;
-using ImproveU_backend.Services.UsuarioService;
+
 using ImproveU_backend.Services.UsuariosServices;
 
 namespace ImproveU_backend.Configuration;
@@ -16,7 +16,7 @@ public static class DependencyInjectionConfig
 {
     public static IServiceCollection ResolveDependencies(this IServiceCollection services)
     {
-        services.AddScoped<IUsuarioServices, UsuarioService>();
+        
         services.AddScoped<IPessoaService, PessoaService>();
         services.AddScoped<IEdFisicoService, EdFisicoService>();
         services.AddScoped<IAlunoService, AlunoService>();

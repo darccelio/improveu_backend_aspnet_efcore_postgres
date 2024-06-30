@@ -7,5 +7,5 @@ public record EdFisicoCreateRequestDto
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string? RegistroConselho { get; set; } = null;
 
-    public PessoaCreateRequestDto Pessoa { get; set; }
+    public PessoaCreateRequestDto PessoaCreateRequestDto { get; set; }
 }

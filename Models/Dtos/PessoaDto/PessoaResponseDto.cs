@@ -6,7 +6,7 @@ public class PessoaResponseDto
 
     public string Cpf { get; set; }
     public string Nome { get; set; }
-    public int UsuarioId { get; set; }
+    //public int UsuarioId { get; set; }
     public string DataCriacao { get; set; }
     public string UltimaAlteracao { get; set; }
 

@@ -26,8 +26,8 @@ public class PessoaDbConfiguration : IEntityTypeConfiguration<Pessoa>
                                     .HasColumnType("varchar(11)")
                                     .IsRequired();
 
-        builder.Property(e => e.UsuarioId).HasColumnName("usuario_id")
-                                          .HasColumnType("int")
+        builder.Property(e => e.IdentityUserId).HasColumnName("identity_user_id")
+                                          .HasColumnType("varchar(255)")
                                           .IsRequired();
 
         builder.Property(e => e.DataCriacao).HasColumnName("data_criacao")
@@ -52,6 +52,7 @@ public class PessoaDbConfiguration : IEntityTypeConfiguration<Pessoa>
         builder.HasMany(f => f.Fotos)
                .WithOne(p => p.Pessoa)
                .HasForeignKey(f => f.PessoaId);
+
     }
 
 }

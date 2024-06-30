@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ImproveU_backend.Controllers
 {
+    //[AllowAnonymous]
     [Authorize]
     [Route("api/alunos")]
     [ApiController]
@@ -26,6 +27,7 @@ namespace ImproveU_backend.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Criar([FromBody] AlunoCreateRequestDto dto)
         {
             if (dto == null)
@@ -42,7 +44,7 @@ namespace ImproveU_backend.Controllers
 
         }
 
-        [ClaimsAuthorize("educador", "ler")]
+        //[ClaimsAuthorize("educador", "ler")]
         [HttpGet]
         [ProducesResponseType(typeof(AlunoResponseDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Buscar(

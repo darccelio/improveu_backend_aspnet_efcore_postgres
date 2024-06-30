@@ -11,26 +11,29 @@ public class AutomapperConfig : Profile
 {
     public AutomapperConfig()
     {
-        CreateMap<Usuario, UsuarioResponseDto>();
-        CreateMap<UsuarioCreateRequestDto, Usuario>();
-        CreateMap<UsuarioUpdateRequestDto, Usuario>();
-
         CreateMap<Pessoa, PessoaResponseDto>();
         CreateMap<PessoaCreateRequestDto, Pessoa>();
 
         CreateMap<Pessoa, Aluno>().ReverseMap();
-
+        
 
         CreateMap<Aluno, AlunoResponseDto>()
             .ForMember(dest => dest.PessoaRequest, opt => opt.MapFrom(src => src.Pessoa));
-        CreateMap<AlunoCreateRequestDto, Aluno>();
+
+        CreateMap<AlunoCreateRequestDto, Aluno>().ForMember(dest => dest.Pessoa, opt => opt.MapFrom(src => src.PessoaCreateRequest));
+
         CreateMap<AlunoUpdateRequestDto, Aluno>();
+
+        CreateMap<AlunoCreateRequestDto, Pessoa>();
+
 
         CreateMap<EdFisico, EdFisicoResponseDto>()
             .ForMember(dest => dest.PessoaRequest, opt => opt.MapFrom(src => src.Pessoa));
 
         CreateMap<EdFisicoCreateRequestDto, EdFisico>()
-            .ForMember(dest => dest.Pessoa, opt => opt.MapFrom(src => src.Pessoa));
+            .ForMember(dest => dest.Pessoa, opt => opt.MapFrom(src => src.PessoaCreateRequestDto));
+
+       
 
         CreateMap<Exercicio, ExercicioResponseDto>();
         CreateMap<ExercicioCreateRequestDto, Exercicio>();

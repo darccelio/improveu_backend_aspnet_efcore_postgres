@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ImproveU_backend.Controllers;
 
+//[AllowAnonymous]
 [Authorize]
 [ApiController]
 [Route("api/educadorfisico")]
@@ -24,6 +25,9 @@ public class EdFisicoController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Criar([FromBody] EdFisicoCreateRequestDto edFisicoRequest)
     {
+
+        Console.WriteLine("edFisicoRequest: " + edFisicoRequest);
+
         if (edFisicoRequest == null)
             return BadRequest();
         try

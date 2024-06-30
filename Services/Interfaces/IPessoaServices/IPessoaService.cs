@@ -4,7 +4,8 @@ namespace ImproveU_backend.Services.Interfaces.IPessoaServices;
 
 public interface IPessoaService
 {
-    public Task<PessoaResponseDto> CriarAsync(PessoaCreateRequestDto pessoaRequest);
+    public Task<PessoaResponseDto> CriarAsync(PessoaCreateRequestDto pessoaRequest,
+                                              Tuple<string, string> claim);
     public Task<PessoaResponseDto> BuscarPorCpfAsync(string cpf);
 
     //public Task<PessoaResponseDto> BuscarPorIdAsync(int id);

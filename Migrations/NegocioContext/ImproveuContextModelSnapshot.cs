@@ -3,24 +3,21 @@ using System;
 using ImproveU_backend.DatabaseConfiguration.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace ImproveU_backend.Migrations
+namespace ImproveU_backend.Migrations.NegocioContext
 {
     [DbContext(typeof(ImproveuContext))]
-    [Migration("20240609031949_Treino")]
-    partial class Treino
+    partial class ImproveuContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -124,7 +121,8 @@ namespace ImproveU_backend.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("nome");
 
                     b.Property<DateTime?>("UltimaAlteracao")
                         .IsConcurrencyToken()
@@ -234,7 +232,62 @@ namespace ImproveU_backend.Migrations
                     b.ToTable("fotos", (string)null);
                 });
 
-            modelBuilder.Entity("ImproveU_backend.Models.ItemTreino", b =>
+            modelBuilder.Entity("ImproveU_backend.Models.ItemTreinoARealizar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CargaEmKg")
+                        .HasColumnType("int")
+                        .HasColumnName("carga");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("data_criacao")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("ExercicioId")
+                        .HasColumnType("int")
+                        .HasColumnName("exercicio_id");
+
+                    b.Property<int?>("IntervaloDescanso")
+                        .HasColumnType("int")
+                        .HasColumnName("intervalo_descanso");
+
+                    b.Property<int?>("Repeticoes")
+                        .HasColumnType("int")
+                        .HasColumnName("repeticoes");
+
+                    b.Property<int?>("Series")
+                        .HasColumnType("int")
+                        .HasColumnName("series");
+
+                    b.Property<int>("TreinoId")
+                        .HasColumnType("int")
+                        .HasColumnName("treino_id");
+
+                    b.Property<DateTime?>("UltimaAlteracao")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("TIMESTAMP")
+                        .HasColumnName("ultima_atualizacao");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExercicioId");
+
+                    b.HasIndex("TreinoId");
+
+                    b.ToTable("itens_treino_realizar", (string)null);
+                });
+
+            modelBuilder.Entity("ImproveU_backend.Models.ItemTreinoRealizados", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -284,13 +337,16 @@ namespace ImproveU_backend.Migrations
                         .HasColumnType("TIMESTAMP")
                         .HasColumnName("ultima_atualizacao");
 
+                    b.Property<bool>("status")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExercicioId");
 
                     b.HasIndex("TreinoId");
 
-                    b.ToTable("itens_treino", (string)null);
+                    b.ToTable("itens_treino_realizado", (string)null);
                 });
 
             modelBuilder.Entity("ImproveU_backend.Models.Pessoa", b =>
@@ -314,6 +370,11 @@ namespace ImproveU_backend.Migrations
                         .HasColumnName("data_criacao")
                         .HasDefaultValueSql("now()");
 
+                    b.Property<string>("IdentityUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("identity_user_id");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("varchar(255)")
@@ -325,14 +386,7 @@ namespace ImproveU_backend.Migrations
                         .HasColumnType("TIMESTAMP")
                         .HasColumnName("ultima_atualizacao");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int")
-                        .HasColumnName("usuario_id");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
 
                     b.ToTable("pessoas", (string)null);
                 });
@@ -353,17 +407,19 @@ namespace ImproveU_backend.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TIMESTAMP")
+                        .HasColumnType("timestamp")
                         .HasColumnName("data_criacao")
                         .HasDefaultValueSql("now()");
 
-                    b.Property<DateTime?>("DataFimVigencia")
-                        .HasColumnType("TIMESTAMP")
+                    b.Property<DateOnly?>("DataFimVigencia")
+                        .HasColumnType("DATE")
                         .HasColumnName("data_fim_vigencia");
 
-                    b.Property<DateTime?>("DataInicioVigencia")
-                        .HasColumnType("TIMESTAMP")
-                        .HasColumnName("data_inicio_vigencia");
+                    b.Property<DateOnly?>("DataInicioVigencia")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATE")
+                        .HasColumnName("data_inicio_vigencia")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<int>("EdFisicoId")
                         .HasColumnType("int")
@@ -378,7 +434,7 @@ namespace ImproveU_backend.Migrations
                     b.Property<DateTime?>("UltimaAlteracao")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("TIMESTAMP")
+                        .HasColumnType("timestamp")
                         .HasColumnName("ultima_atualizacao");
 
                     b.HasKey("Id");
@@ -388,51 +444,6 @@ namespace ImproveU_backend.Migrations
                     b.HasIndex("EdFisicoId");
 
                     b.ToTable("treinos", (string)null);
-                });
-
-            modelBuilder.Entity("ImproveU_backend.Models.Usuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
-
-                    b.Property<short>("Ativo")
-                        .HasColumnType("smallint")
-                        .HasColumnName("ativo");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TIMESTAMP")
-                        .HasColumnName("data_criacao")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("email");
-
-                    b.Property<int>("Papel")
-                        .HasColumnType("int")
-                        .HasColumnName("tipo_pessoa");
-
-                    b.Property<string>("Senha")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("senha");
-
-                    b.Property<DateTime?>("UltimaAlteracao")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("TIMESTAMP")
-                        .HasColumnName("ultima_atualizacao");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("usuarios", (string)null);
                 });
 
             modelBuilder.Entity("ImproveU_backend.Models.Aluno", b =>
@@ -471,7 +482,7 @@ namespace ImproveU_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ImproveU_backend.Models.ItemTreino", "ItemTreino")
+                    b.HasOne("ImproveU_backend.Models.ItemTreinoRealizados", "ItemTreinoRealizado")
                         .WithOne("Feedback")
                         .HasForeignKey("ImproveU_backend.Models.Feedback", "ItemTreinoId");
 
@@ -479,7 +490,7 @@ namespace ImproveU_backend.Migrations
 
                     b.Navigation("EdFisico");
 
-                    b.Navigation("ItemTreino");
+                    b.Navigation("ItemTreinoRealizado");
                 });
 
             modelBuilder.Entity("ImproveU_backend.Models.Foto", b =>
@@ -493,34 +504,42 @@ namespace ImproveU_backend.Migrations
                     b.Navigation("Pessoa");
                 });
 
-            modelBuilder.Entity("ImproveU_backend.Models.ItemTreino", b =>
+            modelBuilder.Entity("ImproveU_backend.Models.ItemTreinoARealizar", b =>
                 {
-                    b.HasOne("ImproveU_backend.Models.Exercicio", "Exercicio")
+                    b.HasOne("ImproveU_backend.Models.Exercicio", "ExercicioARealizar")
                         .WithMany("ItensTreino")
                         .HasForeignKey("ExercicioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ImproveU_backend.Models.Treino", "Treino")
-                        .WithMany("ItensTreino")
+                        .WithMany("ItensTreinoARealizar")
                         .HasForeignKey("TreinoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Exercicio");
+                    b.Navigation("ExercicioARealizar");
 
                     b.Navigation("Treino");
                 });
 
-            modelBuilder.Entity("ImproveU_backend.Models.Pessoa", b =>
+            modelBuilder.Entity("ImproveU_backend.Models.ItemTreinoRealizados", b =>
                 {
-                    b.HasOne("ImproveU_backend.Models.Usuario", "Usuario")
-                        .WithOne("Pessoa")
-                        .HasForeignKey("ImproveU_backend.Models.Pessoa", "UsuarioId")
+                    b.HasOne("ImproveU_backend.Models.Exercicio", "ExercicioRealizado")
+                        .WithMany()
+                        .HasForeignKey("ExercicioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Usuario");
+                    b.HasOne("ImproveU_backend.Models.Treino", "Treino")
+                        .WithMany("ItensTreinoRealizados")
+                        .HasForeignKey("TreinoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExercicioRealizado");
+
+                    b.Navigation("Treino");
                 });
 
             modelBuilder.Entity("ImproveU_backend.Models.Treino", b =>
@@ -561,7 +580,7 @@ namespace ImproveU_backend.Migrations
                     b.Navigation("ItensTreino");
                 });
 
-            modelBuilder.Entity("ImproveU_backend.Models.ItemTreino", b =>
+            modelBuilder.Entity("ImproveU_backend.Models.ItemTreinoRealizados", b =>
                 {
                     b.Navigation("Feedback")
                         .IsRequired();
@@ -579,13 +598,9 @@ namespace ImproveU_backend.Migrations
 
             modelBuilder.Entity("ImproveU_backend.Models.Treino", b =>
                 {
-                    b.Navigation("ItensTreino");
-                });
+                    b.Navigation("ItensTreinoARealizar");
 
-            modelBuilder.Entity("ImproveU_backend.Models.Usuario", b =>
-                {
-                    b.Navigation("Pessoa")
-                        .IsRequired();
+                    b.Navigation("ItensTreinoRealizados");
                 });
 #pragma warning restore 612, 618
         }

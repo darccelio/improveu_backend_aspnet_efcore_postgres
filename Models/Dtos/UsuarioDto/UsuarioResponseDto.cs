@@ -25,4 +25,6 @@ public record UsuarioResponseDto
     public string DataCriacao { get; set; }
 
     public string UltimaAlteracao { get; set; }
+
+    //public string AccessToken { get; set; }
 }

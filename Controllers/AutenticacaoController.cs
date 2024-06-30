@@ -34,8 +34,9 @@ public class AutenticacaoController : MainController
     }
 
     [HttpPost("registrar")]
-    [ProducesResponseType(typeof(UsuarioResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(UsuarioLoginResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Registrar([FromBody] UsuarioCreateRequestDto usuarioRequestDto)
     {
         try
@@ -57,13 +58,13 @@ public class AutenticacaoController : MainController
                 }
                 else
                 {
-                    await _userManager.AddClaimAsync(usuario, new Claim("aluno", "criar, ler"));
-                    //await _userManager.AddToRoleAsync(usuario, "aluno");
+                    await _userManager.AddClaimAsync(usuario, new Claim("aluno", "criar, ler"));                    
                 }
 
                 await _signInManager.SignInAsync(usuario, false);
-                return CustomResponse(await GerarJwt(usuario.Email));
+                UsuarioLoginResponseDto usuarioLoginResponseDto = await GerarJwt(usuario.Email);
 
+                return CustomResponse(await GerarJwt(usuario.Email));
             }
 
             foreach (var error in result.Errors)
@@ -83,7 +84,7 @@ public class AutenticacaoController : MainController
 
 
     [HttpPost("autenticar")]
-    [ProducesResponseType(typeof(UsuarioResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UsuarioLoginResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Autenticar([FromBody] UsuarioLoginRequestDto usuarioRequestDto)
     {
