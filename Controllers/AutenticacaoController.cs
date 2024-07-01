@@ -107,6 +107,20 @@ public class AutenticacaoController : MainController
         return CustomResponse(usuarioRequestDto);
     }
 
+    [HttpPost("sair")]
+    [ProducesResponseType(typeof(UsuarioLoginResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SignOut()
+    {
+        // Para autenticação baseada em cookie:
+        await _signInManager.SignOutAsync();
+
+        // Se estiver usando tokens JWT e precisar de lógica adicional para invalidar o token, insira aqui.
+
+        return Ok(new { message = "Você saiu com sucesso." });
+    }
+
+
     private async Task<UsuarioLoginResponseDto> GerarJwt(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
